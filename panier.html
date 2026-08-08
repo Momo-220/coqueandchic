@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panier — Coque & Chic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    .cart-layout { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-lg); padding: var(--space-lg) 0; }
+    .cart-item { display: grid; grid-template-columns: 100px 1fr auto; gap: var(--space-md); padding: var(--space-md); background: var(--blanc); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); margin-bottom: var(--space-sm); align-items: center; }
+    .cart-item img { width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); }
+    .cart-item .name { font-weight: 600; margin-bottom: 0.3rem; }
+    .cart-item .price { color: var(--rose-deep); font-weight: 600; }
+    .cart-summary { background: var(--blanc); padding: var(--space-md); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); position: sticky; top: 100px; }
+    .cart-summary h3 { font-family: var(--font-serif); margin-bottom: var(--space-md); }
+    .summary-row { display: flex; justify-content: space-between; padding: 0.6rem 0; }
+    .summary-total { border-top: 2px solid var(--rose-soft); margin-top: var(--space-sm); padding-top: var(--space-sm); font-weight: 700; font-size: 1.3rem; color: var(--rose-deep); }
+    .empty-cart { text-align: center; padding: var(--space-xl); }
+    @media (max-width: 768px) { .cart-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="images/coquelogo.png?v=3" alt="Coque & Chic" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="boutique.html" class="nav-link">Boutique</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a href="panier.html" class="icon-btn" aria-label="Panier"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg><span class="badge" id="cartCount" style="display:none">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="section-header" style="padding-top: var(--space-lg);">
+      <h1 class="section-title">Mon panier</h1>
+    </div>
+    <div class="cart-layout">
+      <div id="cartItems"></div>
+      <aside class="cart-summary" id="cartSummary"></aside>
+    </div>
+  </main>
+
+  <div class="modal" id="checkoutModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 1rem;">
+    <div class="modal-content" style="background: var(--blanc); padding: var(--space-lg); border-radius: var(--radius-lg); width: 100%; max-width: 500px; box-shadow: var(--shadow-lg); position: relative; max-height: 90vh; overflow-y: auto; box-sizing: border-box;">
+      <button id="closeModal" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--gris); border: none; background: transparent; cursor: pointer;">&times;</button>
+      <h3 style="font-family: var(--font-serif); margin-bottom: var(--space-md); color: var(--charcoal);">Finaliser la commande</h3>
+      <form id="orderForm" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--charcoal);">Nom & Prénom *</label>
+          <input type="text" id="orderName" required placeholder="Ex: Fatoumata Diarra" style="width: 100%; padding: 0.65rem; border: 1px solid var(--rose-soft); border-radius: var(--radius-md); box-sizing: border-box; font-family: inherit; font-size: 0.9rem;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--charcoal);">Pays de livraison *</label>
+            <select id="orderCountry" required style="width: 100%; padding: 0.65rem; border: 1px solid var(--rose-soft); border-radius: var(--radius-md); box-sizing: border-box; font-family: inherit; font-size: 0.88rem; background: white; font-weight: 600;">
+              <option value="CI" selected>🇨🇮 Côte d'Ivoire (+225)</option>
+              <option value="SN">🇸🇳 Sénégal (+221)</option>
+              <option value="ML">🇲🇱 Mali (+223)</option>
+              <option value="BF">🇧🇫 Burkina Faso (+226)</option>
+              <option value="BJ">🇧🇯 Bénin (+229)</option>
+              <option value="TG">🇹🇬 Togo (+228)</option>
+              <option value="GH">🇬🇭 Ghana (+233)</option>
+              <option value="CM">🇨🇲 Cameroun (+237)</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--charcoal);">Ville *</label>
+            <select id="orderCity" required style="width: 100%; padding: 0.65rem; border: 1px solid var(--rose-soft); border-radius: var(--radius-md); box-sizing: border-box; font-family: inherit; font-size: 0.88rem; background: white; font-weight: 600;">
+            </select>
+          </div>
+        </div>
+
+        <div id="customCityContainer" style="display: none;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--charcoal);">Précisez votre Ville *</label>
+          <input type="text" id="orderCityCustom" placeholder="Nom de votre ville" style="width: 100%; padding: 0.65rem; border: 1px solid var(--rose-soft); border-radius: var(--radius-md); box-sizing: border-box; font-family: inherit; font-size: 0.88rem;">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--charcoal);">Quartier / Zone / Rue *</label>
+          <input type="text" id="orderAddress" required placeholder="Ex: Cocody Riviera 3, Mermoz, Badalabougou..." style="width: 100%; padding: 0.65rem; border: 1px solid var(--rose-soft); border-radius: var(--radius-md); box-sizing: border-box; font-family: inherit; font-size: 0.88rem;">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--charcoal);">Point de repère ou précision <small style="color: var(--gris);">(optionnel)</small></label>
+          <input type="text" id="orderLandmark" placeholder="Ex: En face de la pharmacie, près de la station..." style="width: 100%; padding: 0.65rem; border: 1px solid var(--rose-soft); border-radius: var(--radius-md); box-sizing: border-box; font-family: inherit; font-size: 0.88rem;">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--charcoal);">Numéro WhatsApp / Téléphone *</label>
+          <input type="tel" id="orderPhone" required placeholder="Ex: +225 0700000000" style="width: 100%; padding: 0.65rem; border: 1px solid var(--rose-soft); border-radius: var(--radius-md); box-sizing: border-box; font-family: inherit; font-size: 0.88rem;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--charcoal);">Mode de paiement</label>
+          <input type="hidden" id="orderPayment" value="Wave">
+          <div id="paymentOptionsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 0.5rem;">
+            <div class="payment-card active" data-payment="Wave" style="border: 2px solid #1dc5d8; background: #ffffff; padding: 0.65rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; height: 50px; box-sizing: border-box; transition: all 0.2s;">
+              <img src="images/wave.png" alt="Wave" style="max-height: 36px; max-width: 90%; object-fit: contain;">
+            </div>
+            <div class="payment-card" data-payment="Orange Money" style="border: 1px solid #d1d5db; background: #ffffff; padding: 0.65rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; height: 50px; box-sizing: border-box; transition: all 0.2s;">
+              <img src="images/Orange.png" alt="Orange Money" style="max-height: 36px; max-width: 90%; object-fit: contain;">
+            </div>
+            <div class="payment-card" data-payment="Western Union / Ria" style="border: 1px solid #d1d5db; background: #ffffff; padding: 0.65rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; height: 50px; box-sizing: border-box; transition: all 0.2s;">
+              <img src="images/Western.png" alt="Western Union" style="max-height: 30px; max-width: 45%; object-fit: contain;">
+              <img src="images/ria.png" alt="Ria" style="max-height: 30px; max-width: 45%; object-fit: contain;">
+            </div>
+            <div class="payment-card" data-payment="Paiement à la livraison (Cash)" style="border: 1px solid #d1d5db; background: #ffffff; padding: 0.65rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; height: 50px; box-sizing: border-box; transition: all 0.2s;">
+              <img src="images/Hand-holding-money_-Hand-with-banknotes.-Cash-payment-and-receiving-money-icon.-Paying-money-icons.png" alt="Paiement Main à Main" style="max-height: 36px; max-width: 90%; object-fit: contain;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Zone d'instructions dynamiques pour le paiement -->
+        <div id="paymentInstructions" style="background: var(--blanc-casse); border: 1px solid var(--rose-soft); border-radius: var(--radius-md); padding: 0.85rem 1rem; font-size: 0.85rem; color: var(--charcoal);">
+        </div>
+        
+        <div style="border-top: 1px solid var(--rose-soft); padding-top: var(--space-sm); margin-top: var(--space-sm);">
+          <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; color: var(--rose-deep); margin-bottom: var(--space-sm);">
+            <span>Montant total</span>
+            <span id="modalTotal">0 FCFA</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; cursor: pointer;">Confirmer ma commande</button>
+      </form>
+    </div>
+  </div>
+
+  <a href="https://wa.me/2250768613328" class="whatsapp-float" target="_blank"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg></a>
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- MODAL REÇU NUMÉRIQUE -->
+  <div id="receiptModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 9999; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px);">
+    <div style="background: white; border-radius: 16px; max-width: 520px; width: 100%; max-height: 92vh; overflow-y: auto; padding: 1.75rem; position: relative; box-shadow: var(--shadow-lg); box-sizing: border-box; border: 2px solid var(--rose-soft);">
+      <button id="closeReceiptModal" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--gris); border: none; background: transparent; cursor: pointer;">&times;</button>
+      <div id="receiptContent"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/panier.js?v=30"></script>
+</body>
+</html>

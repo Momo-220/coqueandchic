@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commandes — Coque & Chic Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-logo" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem 0;">
+        <img src="../images/coquelogo.png?v=3" alt="Coque & Chic" style="max-height: 80px; width: auto;">
+      </div>
+      <ul class="admin-nav">
+        <li><a href="dashboard.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Tableau de bord</a></li>
+        <li><a href="products.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg> Produits</a></li>
+        <li><a href="orders.html" class="active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"/></svg> Commandes</a></li>
+        <li><a href="messages.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Messages</a></li>
+        <li><a href="settings.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres & Profil</a></li>
+        <li><a href="../index.html" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg> Voir le site</a></li>
+        <li><a href="#" id="logoutBtn" style="color: #dc2626;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg> Déconnexion</a></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-header">
+        <h1>Commandes clients</h1>
+      </div>
+
+      <div class="admin-card">
+        <table class="admin-table" id="ordersTable">
+          <thead>
+            <tr>
+              <th>Date & Client</th>
+              <th>Paiement & Adresse</th>
+              <th>Articles</th>
+              <th>Total</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL DÉTAILS COMMANDE -->
+  <div id="orderModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 1.5rem; position: relative; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+      <button id="closeOrderModal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gris);">&times;</button>
+      <div id="orderModalContent"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { api, formatPrice } from '../js/api.js';
+    import { auth } from '../js/auth.js';
+    if (!auth.check()) window.location.href = 'index.html';
+
+    const tbody = document.querySelector('#ordersTable tbody');
+
+    function getPaymentBadge(paymentStr) {
+      if (!paymentStr) return '<span style="color: var(--gris);">Non renseigné</span>';
+      let logoHtml = '';
+      if (paymentStr.includes('Wave')) {
+        logoHtml = '<img src="../images/wave.png" alt="Wave" style="height: 22px; width: auto; object-fit: contain; vertical-align: middle;">';
+      } else if (paymentStr.includes('Orange')) {
+        logoHtml = '<img src="../images/Orange.png" alt="Orange Money" style="height: 22px; width: auto; object-fit: contain; vertical-align: middle;">';
+      } else if (paymentStr.includes('Western') || paymentStr.includes('Ria')) {
+        logoHtml = '<img src="../images/Western.png" alt="WU" style="height: 20px; width: auto; object-fit: contain; vertical-align: middle; margin-right: 2px;"><img src="../images/ria.png" alt="Ria" style="height: 20px; width: auto; object-fit: contain; vertical-align: middle;">';
+      } else if (paymentStr.includes('Cash') || paymentStr.includes('livraison')) {
+        logoHtml = '<img src="../images/Hand-holding-money_-Hand-with-banknotes.-Cash-payment-and-receiving-money-icon.-Paying-money-icons.png" alt="Cash" style="height: 22px; width: auto; object-fit: contain; vertical-align: middle;">';
+      }
+      return `<div style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 600;">${logoHtml} <span>${paymentStr}</span></div>`;
+    }
+
+    function showOrderDetail(orderId) {
+      const orders = api.getOrders();
+      const o = orders.find(x => x.id === orderId);
+      if (!o) return;
+
+      const phoneClean = (o.phone || '').replace(/\D/g, '');
+      const waMsg = encodeURIComponent(`Bonjour ${o.customer}, concernant votre commande ${o.id} chez Coque & Chic : `);
+
+      const content = document.getElementById('orderModalContent');
+      content.innerHTML = `
+        <div style="border-bottom: 2px solid var(--rose-soft); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.8rem; color: var(--rose-deep); font-weight: 700; text-transform: uppercase;">Commande N° ${o.id}</div>
+          <h2 style="margin: 0.2rem 0 0 0; font-family: var(--font-serif); font-size: 1.35rem;">Détails de la commande</h2>
+          <div style="font-size: 0.8rem; color: var(--gris); margin-top: 0.2rem;">Date : ${o.date}</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div style="background: #fafafa; padding: 0.85rem; border-radius: 8px; border: 1px solid #f1f5f9;">
+            <div style="font-weight: 700; font-size: 0.85rem; color: var(--charcoal); margin-bottom: 0.4rem;">👤 Informations Client</div>
+            <div style="font-size: 0.9rem; font-weight: 600;">${o.customer}</div>
+            <div style="font-size: 0.85rem; margin-top: 0.2rem;">
+              <a href="https://wa.me/${phoneClean}?text=${waMsg}" target="_blank" style="color: #25d366; font-weight: 700; text-decoration: none;">💬 ${o.phone}</a>
+            </div>
+          </div>
+          <div style="background: #fafafa; padding: 0.85rem; border-radius: 8px; border: 1px solid #f1f5f9;">
+            <div style="font-weight: 700; font-size: 0.85rem; color: var(--charcoal); margin-bottom: 0.4rem;">💳 Mode de Paiement</div>
+            <div>${getPaymentBadge(o.payment)}</div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; padding: 0.85rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 1.25rem;">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--charcoal); margin-bottom: 0.2rem;">📍 Destination de livraison</div>
+          <div style="font-size: 0.88rem; color: var(--gris-fonce); font-weight: 500;">${o.address || 'Abidjan'}</div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--charcoal);">📦 Articles commandés</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+            <thead>
+              <tr style="background: #f1f5f9; text-align: left;">
+                <th style="padding: 0.5rem; border-bottom: 1px solid #cbd5e1;">Article</th>
+                <th style="padding: 0.5rem; border-bottom: 1px solid #cbd5e1; text-align: center;">Qté</th>
+                <th style="padding: 0.5rem; border-bottom: 1px solid #cbd5e1; text-align: right;">Prix Unitaire</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(o.items || []).map(i => `
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 0.5rem; font-weight: 600;">${i.name}</td>
+                  <td style="padding: 0.5rem; text-align: center;">${i.qty}</td>
+                  <td style="padding: 0.5rem; text-align: right; font-weight: 600;">${formatPrice(i.price || 0)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background: var(--rose-blush); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <span style="font-weight: 700; font-size: 1.05rem; color: var(--rose-deep);">Montant Total</span>
+          <span style="font-weight: 700; font-size: 1.2rem; color: var(--rose-deep);">${formatPrice(o.total)}</span>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+          <a href="https://wa.me/${phoneClean}?text=${waMsg}" target="_blank" class="btn btn-primary" style="background: #25d366; border-color: #25d366; text-decoration: none; font-size: 0.85rem; padding: 0.6rem 1rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <span>Contacter sur WhatsApp</span>
+          </a>
+          <button onclick="window.print()" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.6rem 1rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            <span>Imprimer la fiche</span>
+          </button>
+        </div>
+      `;
+
+      document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    document.getElementById('closeOrderModal').onclick = () => {
+      document.getElementById('orderModal').style.display = 'none';
+    };
+
+    document.getElementById('orderModal').onclick = (e) => {
+      if (e.target === document.getElementById('orderModal')) {
+        document.getElementById('orderModal').style.display = 'none';
+      }
+    };
+
+    function render() {
+      const orders = api.getOrders();
+      tbody.innerHTML = '';
+      if (orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gris); padding: 2rem;">Aucune commande pour le moment.</td></tr>`;
+        return;
+      }
+      orders.forEach(o => {
+        const tr = document.createElement('tr');
+        const phoneClean = (o.phone || '').replace(/\D/g, '');
+        const waMsg = encodeURIComponent(`Bonjour ${o.customer}, concernant votre commande chez Coque & Chic (${o.items ? o.items.map(i=>i.name).join(', ') : ''}) : `);
+        
+        tr.innerHTML = `
+          <td style="cursor: pointer;" data-view="${o.id}">
+            <span style="font-size: 0.75rem; color: var(--gris);">${o.date}</span><br>
+            <strong>${o.customer}</strong><br>
+            <a href="https://wa.me/${phoneClean}" target="_blank" onclick="event.stopPropagation()" style="color: #25d366; font-weight: 600; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              <span>${o.phone}</span>
+            </a>
+          </td>
+          <td style="cursor: pointer;" data-view="${o.id}">
+            <div style="margin-bottom: 0.2rem;">${getPaymentBadge(o.payment)}</div>
+            <div style="font-size: 0.8rem; color: var(--gris-fonce);">📍 ${o.address || 'Abidjan'}</div>
+          </td>
+          <td style="cursor: pointer;" data-view="${o.id}"><ul style="padding-left: 1rem; font-size: 0.85rem; margin: 0;">${(o.items || []).map(i => `<li>${i.name} × ${i.qty}</li>`).join('')}</ul></td>
+          <td style="cursor: pointer;" data-view="${o.id}"><strong>${formatPrice(o.total)}</strong></td>
+          <td>
+            <select data-status="${o.id}" class="status ${o.status}" style="border:none; font-weight:600; padding: 0.35rem 0.65rem; border-radius: 999px; font-size: 0.82rem; cursor: pointer;">
+              <option value="en attente" ${o.status==='en attente'?'selected':''}>⏳ En attente</option>
+              <option value="en préparation" ${o.status==='en préparation'?'selected':''}>🔧 En préparation</option>
+              <option value="livrée" ${o.status==='livrée'?'selected':''}>✅ Livrée</option>
+              <option value="annulée" ${o.status==='annulée'?'selected':''}>❌ Annulée</option>
+            </select>
+          </td>
+          <td>
+            <div style="display: flex; gap: 0.4rem; align-items: center;">
+              <button data-viewbtn="${o.id}" class="btn-icon" title="Voir les détails de la commande" style="background: #3b82f6; color: white; border: none; border-radius: 8px; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+              <a href="https://wa.me/${phoneClean}?text=${waMsg}" target="_blank" onclick="event.stopPropagation()" class="btn-icon" title="Contacter le client sur WhatsApp" style="background: #25d366; color: white; border-radius: 8px; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              </a>
+              <button data-delete="${o.id}" class="btn-icon" title="Supprimer la commande" style="background: #ef4444; color: white; border: none; border-radius: 8px; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('[data-view]').forEach(cell => {
+        cell.onclick = () => showOrderDetail(cell.dataset.view);
+      });
+
+      tbody.querySelectorAll('[data-viewbtn]').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          showOrderDetail(btn.dataset.viewbtn);
+        };
+      });
+
+      tbody.querySelectorAll('[data-status]').forEach(sel => {
+        sel.onchange = (e) => {
+          e.stopPropagation();
+          api.updateOrder(sel.dataset.status, { status: sel.value });
+          sel.className = 'status ' + sel.value;
+          render();
+        };
+      });
+
+      tbody.querySelectorAll('[data-delete]').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          if (confirm('Voulez-vous vraiment supprimer cette commande ?')) {
+            const orders = api.getOrders().filter(o => o.id !== btn.dataset.delete);
+            localStorage.setItem('cc_orders', JSON.stringify(orders));
+            try {
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', '/api/orders', false);
+              xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.send(JSON.stringify(orders));
+            } catch (e) {}
+            render();
+          }
+        };
+      });
+    }
+
+    document.getElementById('logoutBtn').onclick = (e) => { e.preventDefault(); auth.logout(); };
+    render();
+  </script>
+</body>
+</html>

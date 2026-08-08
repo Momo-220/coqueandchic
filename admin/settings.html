@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres & Profil — Coque & Chic Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem 0;">
+        <img src="../images/coquelogo.png?v=3" alt="Coque & Chic" style="max-height: 80px; width: auto;">
+      </div>
+      <ul class="admin-nav">
+        <li><a href="dashboard.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Tableau de bord</a></li>
+        <li><a href="products.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Produits</a></li>
+        <li><a href="orders.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"/></svg> Commandes</a></li>
+        <li><a href="messages.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Messages</a></li>
+        <li><a href="settings.html" class="active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres & Profil</a></li>
+        <li><a href="../index.html" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg> Voir le site</a></li>
+        <li><a href="#" id="logoutBtn" style="color: #dc2626;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg> Déconnexion</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+      <div class="admin-header">
+        <h1>Paramètres & Profil du Propriétaire</h1>
+      </div>
+
+      <!-- SECTIONS GRID -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        
+        <!-- PROFIL & SÉCURITÉ ADMIN -->
+        <div class="admin-card">
+          <h2 style="font-size: 1.1rem; color: var(--rose-deep); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            🔐 Profil Administrateur & Sécurité
+          </h2>
+          <form id="securityForm" style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 600; color: var(--texte-sombre);">Nom d'utilisateur Admin :</label>
+              <input type="text" id="adminUser" required style="width: 100%; padding: 0.55rem; border: 1px solid var(--rose-soft); border-radius: 6px; font-family: inherit; font-size: 0.88rem; box-sizing: border-box;">
+            </div>
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 600; color: var(--texte-sombre);">Mot de passe Admin :</label>
+              <input type="password" id="adminPass" required style="width: 100%; padding: 0.55rem; border: 1px solid var(--rose-soft); border-radius: 6px; font-family: inherit; font-size: 0.88rem; box-sizing: border-box;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; font-size: 0.85rem; padding: 0.6rem 1rem;">
+              💾 Enregistrer Sécurité & Profil
+            </button>
+          </form>
+        </div>
+
+        <!-- COORDONNÉES DE PAIEMENT & WHATSAPP -->
+        <div class="admin-card">
+          <h2 style="font-size: 1.1rem; color: var(--rose-deep); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            📱 Coordonnées & Paiements
+          </h2>
+          <form id="contactForm" style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 600; color: var(--texte-sombre);">N° WhatsApp Propriétaire (Réception commandes) :</label>
+              <input type="text" id="ownerPhone" required placeholder="Ex: +2250768613328" style="width: 100%; padding: 0.55rem; border: 1px solid var(--rose-soft); border-radius: 6px; font-family: inherit; font-size: 0.88rem; box-sizing: border-box;">
+            </div>
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 600; color: var(--texte-sombre);">N° Compte Mobile Money (Wave / Orange Money) :</label>
+              <input type="text" id="transferPhone" required placeholder="Ex: +2250715266221" style="width: 100%; padding: 0.55rem; border: 1px solid var(--rose-soft); border-radius: 6px; font-family: inherit; font-size: 0.88rem; box-sizing: border-box;">
+            </div>
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 600; color: var(--texte-sombre);">Nom du Bénéficiaire (Western Union / Ria) :</label>
+              <input type="text" id="beneficiaryName" required placeholder="Ex: TRAORE AMINATA" style="width: 100%; padding: 0.55rem; border: 1px solid var(--rose-soft); border-radius: 6px; font-family: inherit; font-size: 0.88rem; box-sizing: border-box;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; font-size: 0.85rem; padding: 0.6rem 1rem;">
+              💾 Enregistrer Coordonnées & Paiements
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- TARIFS DE LIVRAISON INTERNATIONALES -->
+      <div class="admin-card">
+        <h2 style="font-size: 1.1rem; color: var(--rose-deep); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          🌍 Tarifs d'Expédition & Livraison par Pays
+        </h2>
+        <p style="font-size: 0.83rem; color: var(--gris-fonce); margin-bottom: 1.25rem;">
+          Modifiez les prix de livraison. Ces prix s'appliqueront immédiatement lors de la sélection du pays par les clients.
+        </p>
+
+        <form id="shippingForm">
+          <div id="shippingGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;"></div>
+
+          <button type="submit" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+            💾 Enregistrer la Grille des Tarifs de Livraison
+          </button>
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module">
+    import { api, formatPrice } from '../js/api.js';
+    import { auth } from '../js/auth.js';
+    if (!auth.check()) window.location.href = 'index.html';
+
+    // Charge Settings
+    const settings = api.getSettings();
+    document.getElementById('adminUser').value = settings.adminUser || 'admin';
+    document.getElementById('adminPass').value = settings.adminPass || 'admin';
+    document.getElementById('ownerPhone').value = settings.ownerPhone || '+225 07 68 61 33 28';
+    document.getElementById('transferPhone').value = settings.transferPhone || '+225 07 15 26 62 21';
+    document.getElementById('beneficiaryName').value = settings.beneficiaryName || 'TRAORE AMINATA';
+
+    // Security Form Submit
+    document.getElementById('securityForm').onsubmit = (e) => {
+      e.preventDefault();
+      api.updateSettings({
+        adminUser: document.getElementById('adminUser').value.trim(),
+        adminPass: document.getElementById('adminPass').value.trim(),
+      });
+      alert('✅ Profil Administrateur et identifiants mis à jour avec succès !');
+    };
+
+    // Contact Form Submit
+    document.getElementById('contactForm').onsubmit = (e) => {
+      e.preventDefault();
+      api.updateSettings({
+        ownerPhone: document.getElementById('ownerPhone').value.trim(),
+        transferPhone: document.getElementById('transferPhone').value.trim(),
+        beneficiaryName: document.getElementById('beneficiaryName').value.trim(),
+      });
+      alert('✅ Coordonnées et informations de paiement mises à jour avec succès !');
+    };
+
+    // Charge Shipping Rates
+    const rates = api.getShippingRates();
+    const grid = document.getElementById('shippingGrid');
+
+    function renderShipping() {
+      grid.innerHTML = '';
+      rates.forEach((r, idx) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'background: #fafafa; border: 1px solid var(--rose-soft); border-radius: 8px; padding: 0.85rem; display: flex; flex-direction: column; gap: 0.4rem;';
+        div.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-weight: 700; font-size: 0.95rem;">${r.flag} ${r.country}</span>
+            <span style="font-size: 0.75rem; color: var(--gris); font-weight: 600;">Code : ${r.prefix}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.2rem;">
+            <input type="number" data-idx="${idx}" value="${r.fee}" step="250" min="0" required style="width: 100%; padding: 0.45rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 0.88rem; font-weight: 600;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--rose-deep); white-space: nowrap;">FCFA</span>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    renderShipping();
+
+    // Shipping Form Submit
+    document.getElementById('shippingForm').onsubmit = (e) => {
+      e.preventDefault();
+      document.querySelectorAll('#shippingGrid input[data-idx]').forEach(input => {
+        const idx = parseInt(input.dataset.idx, 10);
+        rates[idx].fee = parseInt(input.value, 10) || 0;
+      });
+      api.updateShippingRates(rates);
+      alert('✅ Tarifs d\'expédition enregistrés et appliqués en direct sur le site web !');
+    };
+
+    document.getElementById('logoutBtn').onclick = (e) => { e.preventDefault(); auth.logout(); };
+  </script>
+</body>
+</html>

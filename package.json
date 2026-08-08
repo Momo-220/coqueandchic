@@ -1,0 +1,9 @@
+{
+  "name": "coque-and-chic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Boutique en ligne moderne de coques et bijoux fantaisies Coque & Chic",
+  "scripts": {
+    "start": "python3 server.py"
+  }
+}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produits — Coque & Chic Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-logo" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem 0;">
+        <img src="../images/coquelogo.png?v=3" alt="Coque & Chic" style="max-height: 80px; width: auto;">
+      </div>
+      <ul class="admin-nav">
+        <li><a href="dashboard.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Tableau de bord</a></li>
+        <li><a href="products.html" class="active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg> Produits</a></li>
+        <li><a href="orders.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"/></svg> Commandes</a></li>
+        <li><a href="messages.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Messages</a></li>
+        <li><a href="settings.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres & Profil</a></li>
+        <li><a href="../index.html" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg> Voir le site</a></li>
+        <li><a href="#" id="logoutBtn" style="color: #dc2626;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg> Déconnexion</a></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-header">
+        <h1>Gestion des produits</h1>
+        <button class="btn btn-primary" id="addProductBtn">+ Nouveau produit</button>
+      </div>
+
+      <div class="admin-card">
+        <table class="admin-table" id="productsTable">
+          <thead><tr><th></th><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal d'édition -->
+  <div id="productModal" class="modal-backdrop" style="display:none;">
+    <div class="modal">
+      <h2 id="modalTitle">Nouveau produit</h2>
+      <form class="modal-form" id="productForm">
+        <input type="text" name="name" placeholder="Nom du produit" required>
+        <select name="category" required>
+          <option value="coques">Coques téléphone</option>
+          <option value="accessoires">Accessoires</option>
+        </select>
+        <input type="number" name="price" placeholder="Prix (FCFA)" required>
+        <input type="number" name="oldPrice" placeholder="Ancien prix (optionnel)">
+        <div id="imageUploadContainer" style="margin-bottom: 1rem;"></div>
+        <input type="hidden" name="image" id="imageUrlInput" required>
+        <input type="number" name="stock" placeholder="Stock disponible" required>
+        <input type="text" name="delivery" placeholder="Délai de livraison (ex: 2 à 5 jours ouvrés)" required>
+        <input type="text" name="badge" placeholder="Badge (ex: New, -25%, Best)">
+        <textarea name="description" placeholder="Description" required></textarea>
+        <label style="display:flex; align-items:center; gap:0.5rem;"><input type="checkbox" name="featured"> Mettre en avant sur l'accueil</label>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="cancelBtn">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <script type="module">
+    import { api, formatPrice } from '../js/api.js';
+    import { auth } from '../js/auth.js';
+    import { createImageUploader } from '../js/upload.js?v=3';
+    if (!auth.check()) window.location.href = 'index.html';
+
+    const tbody = document.querySelector('#productsTable tbody');
+    const modal = document.getElementById('productModal');
+    const form = document.getElementById('productForm');
+    const title = document.getElementById('modalTitle');
+    let editingId = null;
+
+    function render() {
+      const products = api.getProducts();
+      tbody.innerHTML = '';
+      products.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><img src="${p.image}" alt=""></td>
+          <td><strong>${p.name}</strong>${p.badge ? `<br><span class="status" style="background: var(--rose-blush); color: var(--rose-deep);">${p.badge}</span>` : ''}</td>
+          <td>${p.category}</td>
+          <td><strong>${formatPrice(p.price)}</strong></td>
+          <td>${p.stock}</td>
+          <td>
+            <button class="btn-icon" data-edit="${p.id}" title="Modifier" style="display:inline-flex; align-items:center; justify-content:center; padding: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button class="btn-icon danger" data-del="${p.id}" title="Supprimer" style="display:inline-flex; align-items:center; justify-content:center; padding: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openEdit(b.dataset.edit));
+      tbody.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+        if (confirm('Supprimer ce produit ?')) { api.deleteProduct(b.dataset.del); render(); }
+      });
+    }
+
+    function openEdit(id) {
+      editingId = id;
+      title.textContent = 'Modifier le produit';
+      const p = api.getProduct(id);
+      Object.entries(p).forEach(([k, v]) => {
+        const input = form.elements[k];
+        if (input) {
+          if (input.type === 'checkbox') input.checked = !!v;
+          else input.value = v ?? '';
+        }
+      });
+      if (!form.elements.delivery.value) form.elements.delivery.value = '2 à 5 jours ouvrés';
+      initUploader(p.image);
+      modal.style.display = 'grid';
+    }
+
+    document.getElementById('addProductBtn').onclick = () => {
+      editingId = null;
+      title.textContent = 'Nouveau produit';
+      form.reset();
+      initUploader('');
+      modal.style.display = 'grid';
+    };
+
+    function initUploader(currentImage) {
+      const container = document.getElementById('imageUploadContainer');
+      container.innerHTML = '';
+      const uploader = createImageUploader({
+        currentImage,
+        label: 'Choisir une image depuis l\'appareil',
+        onUpload: (url) => { document.getElementById('imageUrlInput').value = url; }
+      });
+      container.appendChild(uploader);
+    }
+
+    document.getElementById('cancelBtn').onclick = () => modal.style.display = 'none';
+    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      data.price = Number(data.price);
+      data.stock = Number(data.stock);
+      if (data.oldPrice) data.oldPrice = Number(data.oldPrice);
+      data.featured = form.elements.featured.checked;
+      if (editingId) api.updateProduct(editingId, data);
+      else api.addProduct(data);
+      modal.style.display = 'none';
+      render();
+    };
+
+    document.getElementById('logoutBtn').onclick = (e) => { e.preventDefault(); auth.logout(); };
+    render();
+  </script>
+</body>
+</html>

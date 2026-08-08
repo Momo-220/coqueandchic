@@ -1,0 +1,172 @@
+[
+  {
+    "id": "p3",
+    "name": "Coque Samsung S24 — Élégance noire",
+    "category": "coques",
+    "price": 9000,
+    "oldPrice": 11000,
+    "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=600",
+    "description": "Coque rigide ultra-fine, design premium.",
+    "stock": 0,
+    "featured": true,
+    "badge": "New",
+    "delivery": "2 à 5 jours ouvrés"
+  },
+  {
+    "id": "nw1",
+    "name": "Nouveau Produit 1",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.39.08.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw2",
+    "name": "Nouveau Produit 2",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.39.15.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw3",
+    "name": "Nouveau Produit 3",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.39.29.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw4",
+    "name": "Nouveau Produit 4",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.39.38.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw5",
+    "name": "Nouveau Produit 5",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.39.47.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw6",
+    "name": "Nouveau Produit 6",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.39.54.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw7",
+    "name": "Nouveau Produit 7",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.40.11.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw8",
+    "name": "Nouveau Produit 8",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.40.13.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw9",
+    "name": "Nouveau Produit 9",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.40.17.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw10",
+    "name": "Nouveau Produit 10",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.40.31.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw11",
+    "name": "Nouveau Produit 11",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.40.37.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "nw12",
+    "name": "Nouveau Produit 12",
+    "category": "coques",
+    "price": 5000,
+    "image": "images/WhatsApp Image 2026-07-03 at 00.40.43.jpeg",
+    "description": "À modifier dans l'admin",
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "p1",
+    "name": "Coque iPhone 15 Pro — Rose poudré",
+    "category": "coques",
+    "price": 8000,
+    "oldPrice": 12000,
+    "image": "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=600",
+    "description": "Coque silicone premium avec finition mate. Protection anti-choc.",
+    "stock": 24,
+    "featured": true,
+    "badge": "Best",
+    "colors": [
+      "#fce7f3",
+      "#0a0a0a",
+      "#ffffff"
+    ]
+  },
+  {
+    "id": "p2",
+    "name": "Coque iPhone 14 — Marbre rose",
+    "category": "coques",
+    "price": 7500,
+    "image": "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=600",
+    "description": "Design marbre unique, toucher soyeux.",
+    "stock": 18,
+    "featured": true
+  },
+  {
+    "id": "p4",
+    "name": "Bracelet cœur doré",
+    "category": "accessoires",
+    "price": 4500,
+    "image": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600",
+    "description": "Plaqué or 18K, fermoir mousqueton.",
+    "stock": 30,
+    "featured": true
+  }
+]

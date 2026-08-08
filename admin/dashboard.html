@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Coque & Chic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem 0;">
+        <img src="../images/coquelogo.png?v=3" alt="Coque & Chic" style="max-height: 80px; width: auto;">
+      </div>
+      <ul class="admin-nav">
+        <li><a href="dashboard.html" class="active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Tableau de bord
+        </a></li>
+        <li><a href="products.html">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Produits
+        </a></li>
+        <li><a href="orders.html">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          Commandes
+        </a></li>
+        <li><a href="messages.html">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Messages
+          <span class="badge-mini" id="msgBadge">0</span>
+        </a></li>
+        <li><a href="settings.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres & Profil</a></li>
+        <li><a href="../index.html" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+          Voir le site
+        </a></li>
+        <li><a href="#" id="logoutBtn" style="color: #dc2626;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Déconnexion
+        </a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+      <div class="admin-header">
+        <h1>Tableau de bord</h1>
+        <div class="admin-user"><span>Propriétaire</span></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="stat-value" id="totalRevenue">0</div>
+          <div class="stat-label">Chiffre d'affaires</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          </div>
+          <div class="stat-value" id="totalOrders">0</div>
+          <div class="stat-label">Commandes totales</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
+          </div>
+          <div class="stat-value" id="totalProducts">0</div>
+          <div class="stat-label">Produits en ligne</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="stat-value" id="totalMessages">0</div>
+          <div class="stat-label">Messages non lus</div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Dernières commandes</h2>
+        <table class="admin-table" id="recentOrdersTable">
+          <thead><tr><th>Date</th><th>Client</th><th>Mode de Paiement</th><th>Articles</th><th>Total</th><th>Statut</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+
+  <script type="module">
+    import { api, formatPrice } from '../js/api.js';
+    import { auth } from '../js/auth.js';
+    if (!auth.check()) window.location.href = 'index.html';
+    const orders = api.getOrders();
+    const products = api.getProducts();
+    const messages = api.getMessages();
+    const revenue = orders.filter(o => o.status === 'livrée').reduce((s, o) => s + o.total, 0);
+    document.getElementById('totalRevenue').textContent = formatPrice(revenue);
+    document.getElementById('totalOrders').textContent = orders.length;
+    document.getElementById('totalProducts').textContent = products.length;
+    document.getElementById('totalMessages').textContent = messages.filter(m => !m.read).length;
+    document.getElementById('msgBadge').textContent = messages.filter(m => !m.read).length;
+    document.getElementById('msgBadge').style.display = messages.filter(m => !m.read).length ? 'inline-block' : 'none';
+    function getPaymentBadge(paymentStr) {
+      if (!paymentStr) return '<span style="color: var(--gris);">Non renseigné</span>';
+      let logoHtml = '';
+      if (paymentStr.includes('Wave')) {
+        logoHtml = '<img src="../images/wave.png" alt="Wave" style="height: 18px; width: auto; object-fit: contain; vertical-align: middle;">';
+      } else if (paymentStr.includes('Orange')) {
+        logoHtml = '<img src="../images/Orange.png" alt="Orange Money" style="height: 18px; width: auto; object-fit: contain; vertical-align: middle;">';
+      } else if (paymentStr.includes('Western') || paymentStr.includes('Ria')) {
+        logoHtml = '<img src="../images/Western.png" alt="WU" style="height: 16px; width: auto; object-fit: contain; vertical-align: middle; margin-right: 2px;"><img src="../images/ria.png" alt="Ria" style="height: 16px; width: auto; object-fit: contain; vertical-align: middle;">';
+      } else if (paymentStr.includes('Cash') || paymentStr.includes('livraison')) {
+        logoHtml = '<img src="../images/Hand-holding-money_-Hand-with-banknotes.-Cash-payment-and-receiving-money-icon.-Paying-money-icons.png" alt="Cash" style="height: 18px; width: auto; object-fit: contain; vertical-align: middle;">';
+      }
+      return `<div style="display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; font-weight: 600;">${logoHtml} <span>${paymentStr}</span></div>`;
+    }
+
+    const tbody = document.querySelector('#recentOrdersTable tbody');
+    if (orders.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gris); padding: 1.5rem;">Aucune commande récente.</td></tr>`;
+    } else {
+      orders.slice(0, 5).forEach(o => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span style="font-size: 0.8rem; color: var(--gris);">${o.date}</span></td>
+          <td><strong>${o.customer}</strong><br><small style="color: var(--gris);">${o.phone}</small></td>
+          <td>${getPaymentBadge(o.payment)}</td>
+          <td>${(o.items || []).length} article(s)</td>
+          <td><strong>${formatPrice(o.total)}</strong></td>
+          <td><span class="status ${o.status}">${o.status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    document.getElementById('logoutBtn').onclick = (e) => { e.preventDefault(); auth.logout(); };
+  </script>
+</body>
+</html>
