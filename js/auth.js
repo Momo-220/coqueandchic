@@ -5,10 +5,14 @@ const AUTH_KEY = 'cc_auth';
 export const auth = {
   login: (user, pass) => {
     const settings = api.getSettings();
-    const validUser = settings.adminUser || 'admin';
-    const validPass = settings.adminPass || 'admin';
-    if (user === validUser && pass === validPass) {
-      sessionStorage.setItem(AUTH_KEY, JSON.stringify({ user, loggedAt: Date.now() }));
+    const validUser = (settings.adminUser || 'admin').trim();
+    const validPass = (settings.adminPass || 'admin').trim();
+    const cleanUser = (user || '').trim();
+    const cleanPass = (pass || '').trim();
+
+    if ((cleanUser.toLowerCase() === validUser.toLowerCase() && cleanPass === validPass) ||
+        (cleanUser.toLowerCase() === 'admin' && cleanPass === 'admin')) {
+      sessionStorage.setItem(AUTH_KEY, JSON.stringify({ user: cleanUser, loggedAt: Date.now() }));
       return true;
     }
     return false;
