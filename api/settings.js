@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const data = await dbGet('cc_settings', 'settings.json');
+      const data = await dbGet('settings', 'settings.json');
       return res.status(200).json(data || {});
     } catch (e) {
       return res.status(500).json({ error: e.message });
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const data = req.body;
-      await dbSet('cc_settings', data, 'settings.json');
+      await dbSet('settings', data, 'settings.json');
       return res.status(200).json({ status: 'ok' });
     } catch (e) {
       return res.status(500).json({ error: e.message });

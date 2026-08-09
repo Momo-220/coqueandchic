@@ -1,47 +1,36 @@
-import { createClient as createRedisClient } from 'redis';
-import { createClient as createKvClient } from '@vercel/kv';
+import { MongoClient } from 'mongodb';
 import fs from 'fs';
 import path from 'path';
 
-let client = null;
-let clientType = null; // 'kv' or 'redis'
+let cachedClient = null;
+let cachedDb = null;
 
-async function getClient() {
-  if (client) return client;
-
-  // 1. Tente de se connecter via Vercel KV (REST API)
-  const restUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const restToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-
-  if (restUrl && restToken) {
-    try {
-      client = createKvClient({ url: restUrl, token: restToken });
-      clientType = 'kv';
-      return client;
-    } catch (e) {
-      console.error('Failed to init Vercel KV REST client:', e);
-    }
+async function connectToDatabase() {
+  if (cachedDb) {
+    return cachedDb;
   }
 
-  // 2. Tente de se connecter via Redis URL standard (TCP)
-  const redisUrl = process.env.REDIS_URL;
-  if (redisUrl) {
-    try {
-      const redisClient = createRedisClient({ url: redisUrl });
-      await redisClient.connect();
-      client = redisClient;
-      clientType = 'redis';
-      return client;
-    } catch (e) {
-      console.error('Failed to init Redis TCP client:', e);
-    }
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    console.warn('MONGODB_URI environment variable is missing, using local files.');
+    return null;
   }
 
-  return null;
+  try {
+    const client = new MongoClient(uri);
+    await client.connect();
+    const db = client.db('coqueandchic');
+    cachedClient = client;
+    cachedDb = db;
+    return db;
+  } catch (e) {
+    console.error('Failed to connect to MongoDB:', e);
+    return null;
+  }
 }
 
-export async function dbGet(key, fallbackFile) {
-  // Charger les données de dev locales
+export async function dbGet(collectionName, fallbackFile) {
+  // 1. Charger les données locales d'origine (fallback / seeding)
   const filePath = path.join(process.cwd(), 'data', fallbackFile);
   let localData = null;
   if (fs.existsSync(filePath)) {
@@ -54,60 +43,68 @@ export async function dbGet(key, fallbackFile) {
   }
 
   try {
-    const activeClient = await getClient();
-    if (activeClient) {
-      let rawData = null;
-      if (clientType === 'kv') {
-        rawData = await activeClient.get(key);
-      } else if (clientType === 'redis') {
-        const val = await activeClient.get(key);
-        rawData = val ? JSON.parse(val) : null;
-      }
+    const db = await connectToDatabase();
+    if (db) {
+      const count = await db.collection(collectionName).countDocuments();
 
-      if (rawData !== null && rawData !== undefined) {
-        return rawData;
-      }
-
-      // Auto-Seeding : Si la DB est vide, on injecte les données de dev locales
-      if (localData !== null) {
-        if (clientType === 'kv') {
-          await activeClient.set(key, localData);
-        } else if (clientType === 'redis') {
-          await activeClient.set(key, JSON.stringify(localData));
+      if (count > 0) {
+        // Charger les données depuis MongoDB
+        if (collectionName === 'settings') {
+          const doc = await db.collection(collectionName).findOne({});
+          if (doc) {
+            const { _id, ...rest } = doc;
+            return rest;
+          }
+        } else {
+          const docs = await db.collection(collectionName).find({}).toArray();
+          return docs.map(({ _id, ...rest }) => rest);
         }
-        return localData;
+      } else {
+        // Auto-Seeding : Si la collection est vide, on l'initialise avec les données locales
+        if (localData !== null) {
+          if (collectionName === 'settings') {
+            await db.collection(collectionName).replaceOne({}, localData, { upsert: true });
+          } else if (Array.isArray(localData) && localData.length > 0) {
+            await db.collection(collectionName).insertMany(localData);
+          }
+          return localData;
+        }
       }
     }
   } catch (e) {
-    console.error(`Database error on get ${key}:`, e);
+    console.error(`MongoDB error on get ${collectionName}:`, e);
   }
 
-  return localData;
+  return localData || (collectionName === 'settings' ? {} : []);
 }
 
-export async function dbSet(key, value, fallbackFile) {
+export async function dbSet(collectionName, value, fallbackFile) {
   let success = false;
   try {
-    const activeClient = await getClient();
-    if (activeClient) {
-      if (clientType === 'kv') {
-        await activeClient.set(key, value);
-      } else if (clientType === 'redis') {
-        await activeClient.set(key, JSON.stringify(value));
+    const db = await connectToDatabase();
+    if (db) {
+      if (collectionName === 'settings') {
+        await db.collection(collectionName).replaceOne({}, value, { upsert: true });
+      } else {
+        // Remplacer l'ensemble de la collection par les nouvelles valeurs envoyées
+        await db.collection(collectionName).deleteMany({});
+        if (Array.isArray(value) && value.length > 0) {
+          await db.collection(collectionName).insertMany(value);
+        }
       }
       success = true;
     }
   } catch (e) {
-    console.error(`Database error on set ${key}:`, e);
+    console.error(`MongoDB error on set ${collectionName}:`, e);
   }
 
-  // Backup écriture locale
+  // Backup dans le fichier local
   try {
     const filePath = path.join(process.cwd(), 'data', fallbackFile);
     fs.writeFileSync(filePath, JSON.stringify(value, null, 2), 'utf8');
     success = true;
   } catch (e) {
-    console.error(`File write error on set ${key}:`, e);
+    console.error(`File write error on set ${collectionName}:`, e);
   }
 
   return success;
