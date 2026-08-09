@@ -168,8 +168,8 @@
       }
     };
 
-    function render() {
-      const orders = api.getOrders();
+    async function render() {
+      const orders = await api.fetchOrders();
       tbody.innerHTML = '';
       if (orders.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gris); padding: 2rem;">Aucune commande pour le moment.</td></tr>`;

@@ -101,16 +101,39 @@
     import { api, formatPrice } from '../js/api.js';
     import { auth } from '../js/auth.js';
     if (!auth.check()) window.location.href = '/admin/index.html';
-    const orders = api.getOrders();
-    const products = api.getProducts();
-    const messages = api.getMessages();
-    const revenue = orders.filter(o => o.status === 'livrée').reduce((s, o) => s + o.total, 0);
-    document.getElementById('totalRevenue').textContent = formatPrice(revenue);
-    document.getElementById('totalOrders').textContent = orders.length;
-    document.getElementById('totalProducts').textContent = products.length;
-    document.getElementById('totalMessages').textContent = messages.filter(m => !m.read).length;
-    document.getElementById('msgBadge').textContent = messages.filter(m => !m.read).length;
-    document.getElementById('msgBadge').style.display = messages.filter(m => !m.read).length ? 'inline-block' : 'none';
+    async function initDashboard() {
+      const orders = await api.fetchOrders();
+      const products = await api.fetchProducts();
+      const messages = await api.fetchMessages();
+
+      const revenue = orders.filter(o => o.status === 'livrée').reduce((s, o) => s + o.total, 0);
+      document.getElementById('totalRevenue').textContent = formatPrice(revenue);
+      document.getElementById('totalOrders').textContent = orders.length;
+      document.getElementById('totalProducts').textContent = products.length;
+      document.getElementById('totalMessages').textContent = messages.filter(m => !m.read).length;
+      document.getElementById('msgBadge').textContent = messages.filter(m => !m.read).length;
+      document.getElementById('msgBadge').style.display = messages.filter(m => !m.read).length ? 'inline-block' : 'none';
+
+      const tbody = document.querySelector('#recentOrdersTable tbody');
+      tbody.innerHTML = '';
+      if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--gris); padding:2rem;">Aucune commande pour le moment.</td></tr>';
+      } else {
+        orders.slice(0, 5).forEach(o => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${o.id}</strong></td>
+            <td>${o.customer}</td>
+            <td>${o.date}</td>
+            <td>${getPaymentBadge(o.payment)}</td>
+            <td><strong>${formatPrice(o.total)}</strong></td>
+            <td><span class="status ${o.status.replace(/\s+/g, '-')}">${o.status}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
     function getPaymentBadge(paymentStr) {
       if (!paymentStr) return '<span style="color: var(--gris);">Non renseigné</span>';
       let logoHtml = '';
@@ -126,23 +149,7 @@
       return `<div style="display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; font-weight: 600;">${logoHtml} <span>${paymentStr}</span></div>`;
     }
 
-    const tbody = document.querySelector('#recentOrdersTable tbody');
-    if (orders.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gris); padding: 1.5rem;">Aucune commande récente.</td></tr>`;
-    } else {
-      orders.slice(0, 5).forEach(o => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><span style="font-size: 0.8rem; color: var(--gris);">${o.date}</span></td>
-          <td><strong>${o.customer}</strong><br><small style="color: var(--gris);">${o.phone}</small></td>
-          <td>${getPaymentBadge(o.payment)}</td>
-          <td>${(o.items || []).length} article(s)</td>
-          <td><strong>${formatPrice(o.total)}</strong></td>
-          <td><span class="status ${o.status}">${o.status}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+    initDashboard();
     document.getElementById('logoutBtn').onclick = (e) => { e.preventDefault(); auth.logout(); };
   </script>
 </body>

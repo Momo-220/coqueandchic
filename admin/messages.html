@@ -66,8 +66,8 @@
     const detail = document.getElementById('messageDetail');
     let currentId = null;
 
-    function render() {
-      const messages = api.getMessages();
+    async function render() {
+      const messages = await api.fetchMessages();
       list.innerHTML = '';
       if (messages.length === 0) {
         list.innerHTML = '<p style="padding:2rem; text-align:center; color: var(--gris);">Aucun message</p>';

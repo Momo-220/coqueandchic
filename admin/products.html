@@ -83,8 +83,8 @@
     const title = document.getElementById('modalTitle');
     let editingId = null;
 
-    function render() {
-      const products = api.getProducts();
+    async function render() {
+      const products = await api.fetchProducts();
       tbody.innerHTML = '';
       products.forEach(p => {
         const tr = document.createElement('tr');
@@ -107,8 +107,8 @@
       });
 
       tbody.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openEdit(b.dataset.edit));
-      tbody.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
-        if (confirm('Supprimer ce produit ?')) { api.deleteProduct(b.dataset.del); render(); }
+      tbody.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+        if (confirm('Supprimer ce produit ?')) { api.deleteProduct(b.dataset.del); await render(); }
       });
     }
 

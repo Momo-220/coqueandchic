@@ -35,4 +35,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (e) {}
   initLogo();
   initMenu();
+
+  // Polling intelligent toutes les 15s pour garder les données synchronisées sur tous les appareils
+  setInterval(async () => {
+    try {
+      await api.syncAllFromDatabase();
+      initLogo();
+    } catch (e) {}
+  }, 15000);
 });
