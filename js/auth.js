@@ -35,7 +35,7 @@ if (form) {
     if (auth.login(data.user, data.pass)) {
       window.location.href = '/admin/dashboard.html';
     } else {
-      alert('❌ Identifiants incorrects. Démo : admin / admin');
+      alert('❌ Identifiants incorrects.');
     }
   });
 }
