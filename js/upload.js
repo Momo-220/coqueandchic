@@ -59,12 +59,31 @@ export const compressImage = (dataURL, maxWidth = 1200, quality = 0.85) => {
  * @param {File} file
  * @param {string} key - Identifiant (ex: 'logo', 'p1', 'p2')
  * @returns {Promise<string>} URL finale
- */
-export const uploadImage = async (file, key) => {
+ */export const uploadImage = async (file, key) => {
   try {
     let dataURL = await readImageAsDataURL(file);
     dataURL = await compressImage(dataURL);
-    localStorage.setItem(IMG_PREFIX + key, dataURL);
+    if (key === 'logo') {
+      let settings = {};
+      try {
+        const cached = localStorage.getItem('cc_settings');
+        if (cached) settings = JSON.parse(cached);
+      } catch (e) {}
+
+      settings.logo = dataURL;
+      localStorage.setItem('cc_settings', JSON.stringify(settings));
+
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/settings', false);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(settings));
+      } catch (e) {
+        console.warn('Failed to sync settings with uploaded logo:', e);
+      }
+    } else {
+      localStorage.setItem(IMG_PREFIX + key, dataURL);
+    }
     return dataURL;
   } catch (err) {
     throw err;
@@ -72,11 +91,33 @@ export const uploadImage = async (file, key) => {
 };
 
 /**
- * Récupère une image uploadée
+ * Récupère une image uploadée (pour le logo, cherche en base de données via settings)
  * @param {string} key
  * @returns {string|null} URL ou null
  */
 export const getUploadedImage = (key) => {
+  if (key === 'logo') {
+    try {
+      const cached = localStorage.getItem('cc_settings');
+      if (cached) {
+        const settings = JSON.parse(cached);
+        if (settings && settings.logo) return settings.logo;
+      }
+      
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/settings', false);
+      xhr.send();
+      if (xhr.status === 200) {
+        const settings = JSON.parse(xhr.responseText);
+        if (settings && settings.logo) {
+          localStorage.setItem('cc_settings', xhr.responseText);
+          return settings.logo;
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load logo from settings:', e);
+    }
+  }
   return localStorage.getItem(IMG_PREFIX + key);
 };
 
@@ -95,9 +136,28 @@ export const resolveImage = (key, fallback) => {
  * @param {string} key
  */
 export const deleteImage = (key) => {
-  localStorage.removeItem(IMG_PREFIX + key);
-};
+  if (key === 'logo') {
+    let settings = {};
+    try {
+      const cached = localStorage.getItem('cc_settings');
+      if (cached) settings = JSON.parse(cached);
+    } catch (e) {}
 
+    delete settings.logo;
+    localStorage.setItem('cc_settings', JSON.stringify(settings));
+
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/settings', false);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(settings));
+    } catch (e) {
+      console.warn('Failed to sync settings after deleting logo:', e);
+    }
+  } else {
+    localStorage.removeItem(IMG_PREFIX + key);
+  }
+};
 /**
  * Crée un input d'upload caché + un bouton stylisé
  * À utiliser dans les pages admin
