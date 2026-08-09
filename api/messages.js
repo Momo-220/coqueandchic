@@ -1,6 +1,4 @@
-import { kv } from '@vercel/kv';
-import fs from 'fs';
-import path from 'path';
+import { dbGet, dbSet } from './db.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -11,34 +9,19 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const useKV = !!process.env.KV_REST_API_URL;
-  const filePath = path.join(process.cwd(), 'data', 'messages.json');
-
   if (req.method === 'GET') {
     try {
-      if (useKV) {
-        const data = await kv.get('cc_messages');
-        if (data) return res.status(200).json(data);
-      }
-      if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, 'utf8');
-        return res.status(200).json(JSON.parse(content));
-      }
+      const data = await dbGet('cc_messages', 'messages.json');
+      return res.status(200).json(data || []);
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }
-    return res.status(200).json([]);
   }
 
   if (req.method === 'POST') {
     try {
       const data = req.body;
-      if (useKV) {
-        await kv.set('cc_messages', data);
-      }
-      try {
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
-      } catch (e) {}
+      await dbSet('cc_messages', data, 'messages.json');
       return res.status(200).json({ status: 'ok' });
     } catch (e) {
       return res.status(500).json({ error: e.message });
