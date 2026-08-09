@@ -110,37 +110,53 @@
     import { auth } from '../js/auth.js';
     if (!auth.check()) window.location.href = '/admin/index.html';
 
-    // Charge Settings
-    const settings = api.getSettings();
-    document.getElementById('adminUser').value = settings.adminUser || 'admin';
-    document.getElementById('adminPass').value = settings.adminPass || 'admin';
-    document.getElementById('ownerPhone').value = settings.ownerPhone || '+225 07 68 61 33 28';
-    document.getElementById('transferPhone').value = settings.transferPhone || '+225 07 15 26 62 21';
-    document.getElementById('beneficiaryName').value = settings.beneficiaryName || 'TRAORE AMINATA';
+    let rates = [];
+
+    async function initSettings() {
+      // Charge Settings live depuis MongoDB Atlas
+      const settings = await api.fetchSettings();
+      document.getElementById('adminUser').value = settings.adminUser || 'admin';
+      document.getElementById('adminPass').value = settings.adminPass || 'admin';
+      document.getElementById('ownerPhone').value = settings.ownerPhone || '+225 07 68 61 33 28';
+      document.getElementById('transferPhone').value = settings.transferPhone || '+225 07 15 26 62 21';
+      document.getElementById('beneficiaryName').value = settings.beneficiaryName || 'TRAORE AMINATA';
+
+      // Charge Shipping Rates live depuis MongoDB Atlas
+      rates = await api.fetchShippingRates();
+      renderShipping();
+    }
 
     // Security Form Submit
-    document.getElementById('securityForm').onsubmit = (e) => {
+    document.getElementById('securityForm').onsubmit = async (e) => {
       e.preventDefault();
-      api.updateSettings({
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '💾 Enregistrement...'; }
+      
+      await api.updateSettings({
         adminUser: document.getElementById('adminUser').value.trim(),
         adminPass: document.getElementById('adminPass').value.trim(),
       });
-      alert('✅ Profil Administrateur et identifiants mis à jour avec succès !');
+      
+      alert('✅ Profil Administrateur et identifiants enregistrés sur MongoDB Atlas avec succès !');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '💾 Enregistrer les identifiants'; }
     };
 
     // Contact Form Submit
-    document.getElementById('contactForm').onsubmit = (e) => {
+    document.getElementById('contactForm').onsubmit = async (e) => {
       e.preventDefault();
-      api.updateSettings({
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '💾 Enregistrement...'; }
+
+      await api.updateSettings({
         ownerPhone: document.getElementById('ownerPhone').value.trim(),
         transferPhone: document.getElementById('transferPhone').value.trim(),
         beneficiaryName: document.getElementById('beneficiaryName').value.trim(),
       });
-      alert('✅ Coordonnées et informations de paiement mises à jour avec succès !');
+
+      alert('✅ Coordonnées et informations de paiement enregistrées sur MongoDB Atlas avec succès !');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '💾 Enregistrer les Coordonnées'; }
     };
 
-    // Charge Shipping Rates
-    const rates = api.getShippingRates();
     const grid = document.getElementById('shippingGrid');
 
     function renderShipping() {
@@ -162,8 +178,6 @@
       });
     }
 
-    renderShipping();
-
     // Shipping Form Submit
     document.getElementById('shippingForm').onsubmit = (e) => {
       e.preventDefault();
@@ -172,8 +186,10 @@
         rates[idx].fee = parseInt(input.value, 10) || 0;
       });
       api.updateShippingRates(rates);
-      alert('✅ Tarifs d\'expédition enregistrés et appliqués en direct sur le site web !');
+      alert('✅ Tarifs d\'expédition enregistrés sur MongoDB Atlas avec succès !');
     };
+
+    initSettings();
 
     document.getElementById('logoutBtn').onclick = (e) => { e.preventDefault(); auth.logout(); };
   </script>

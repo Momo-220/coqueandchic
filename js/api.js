@@ -193,11 +193,74 @@ export const api = {
       beneficiaryCountry: "Côte d'Ivoire"
     };
   },
-  updateSettings: (newSettings) => {
-    const current = api.getSettings();
+  fetchSettings: async () => {
+    try {
+      const res = await fetch('/api/settings?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Object.keys(data).length > 0) {
+          sessionStorage.setItem(DB_KEYS.settings, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to fetch settings directly:', e);
+    }
+    return api.getSettings();
+  },
+  updateSettings: async (newSettings) => {
+    const current = await api.fetchSettings();
     const updated = { ...current, ...newSettings };
     set(DB_KEYS.settings, updated);
     return updated;
+  },
+  fetchProducts: async (filter = {}) => {
+    try {
+      const res = await fetch('/api/products?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          sessionStorage.setItem(DB_KEYS.products, JSON.stringify(data));
+        }
+      }
+    } catch (e) {}
+    return api.getProducts(filter);
+  },
+  fetchOrders: async () => {
+    try {
+      const res = await fetch('/api/orders?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          sessionStorage.setItem(DB_KEYS.orders, JSON.stringify(data));
+        }
+      }
+    } catch (e) {}
+    return api.getOrders();
+  },
+  fetchMessages: async () => {
+    try {
+      const res = await fetch('/api/messages?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          sessionStorage.setItem(DB_KEYS.messages, JSON.stringify(data));
+        }
+      }
+    } catch (e) {}
+    return api.getMessages();
+  },
+  fetchShippingRates: async () => {
+    try {
+      const res = await fetch('/api/shipping?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          sessionStorage.setItem(DB_KEYS.shipping, JSON.stringify(data));
+        }
+      }
+    } catch (e) {}
+    return api.getShippingRates();
   },
   syncAllFromDatabase: async () => {
     const endpoints = [
@@ -209,7 +272,7 @@ export const api = {
     ];
     await Promise.all(endpoints.map(async (ep) => {
       try {
-        const res = await fetch(`/api/${ep.name}`);
+        const res = await fetch(`/api/${ep.name}?t=` + Date.now());
         if (res.ok) {
           const data = await res.json();
           if (data !== null && data !== undefined) {
