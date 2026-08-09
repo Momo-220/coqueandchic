@@ -10,8 +10,7 @@ export const auth = {
     const cleanUser = (user || '').trim();
     const cleanPass = (pass || '').trim();
 
-    if ((cleanUser.toLowerCase() === validUser.toLowerCase() && cleanPass === validPass) ||
-        (cleanUser.toLowerCase() === 'admin' && cleanPass === 'admin')) {
+    if (cleanUser.toLowerCase() === validUser.toLowerCase() && cleanPass === validPass) {
       sessionStorage.setItem(AUTH_KEY, JSON.stringify({ user: cleanUser, loggedAt: Date.now() }));
       return true;
     }
