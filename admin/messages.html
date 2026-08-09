@@ -60,7 +60,7 @@
   <script type="module">
     import { api } from '../js/api.js';
     import { auth } from '../js/auth.js';
-    if (!auth.check()) window.location.href = 'index.html';
+    if (!auth.check()) window.location.href = '/admin/index.html';
 
     const list = document.getElementById('messageList');
     const detail = document.getElementById('messageDetail');

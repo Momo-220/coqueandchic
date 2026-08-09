@@ -75,7 +75,7 @@
     import { api, formatPrice } from '../js/api.js';
     import { auth } from '../js/auth.js';
     import { createImageUploader } from '../js/upload.js?v=3';
-    if (!auth.check()) window.location.href = 'index.html';
+    if (!auth.check()) window.location.href = '/admin/index.html';
 
     const tbody = document.querySelector('#productsTable tbody');
     const modal = document.getElementById('productModal');

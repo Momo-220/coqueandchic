@@ -100,7 +100,7 @@
   <script type="module">
     import { api, formatPrice } from '../js/api.js';
     import { auth } from '../js/auth.js';
-    if (!auth.check()) window.location.href = 'index.html';
+    if (!auth.check()) window.location.href = '/admin/index.html';
     const orders = api.getOrders();
     const products = api.getProducts();
     const messages = api.getMessages();

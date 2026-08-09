@@ -172,7 +172,7 @@
     import { uploadImage, getUploadedImage, deleteImage, readImageAsDataURL, compressImage } from '../js/upload.js?v=3';
     import { api } from '../js/api.js';
     import { auth } from '../js/auth.js';
-    if (!auth.check()) window.location.href = 'login.html';
+    if (!auth.check()) window.location.href = '/admin/index.html';
 
     // ============= LOGO =============
     const logoZone = document.getElementById('logoZone');

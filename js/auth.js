@@ -19,7 +19,7 @@ export const auth = {
   },
   logout: () => {
     sessionStorage.removeItem(AUTH_KEY);
-    window.location.href = 'index.html';
+    window.location.href = '/admin/index.html';
   },
   check: () => {
     return !!sessionStorage.getItem(AUTH_KEY);
@@ -33,7 +33,7 @@ if (form) {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
     if (auth.login(data.user, data.pass)) {
-      window.location.href = 'dashboard.html';
+      window.location.href = '/admin/dashboard.html';
     } else {
       alert('❌ Identifiants incorrects. Démo : admin / admin');
     }
@@ -41,6 +41,10 @@ if (form) {
 }
 
 // Redirection auto si déjà connecté
-if (window.location.pathname.endsWith('index.html') && auth.check()) {
-  window.location.href = 'dashboard.html';
+const isLoginPage = window.location.pathname === '/admin' || 
+                     window.location.pathname === '/admin/' || 
+                     window.location.pathname.endsWith('/admin/index.html') ||
+                     window.location.pathname.endsWith('/admin/index');
+if (isLoginPage && auth.check()) {
+  window.location.href = '/admin/dashboard.html';
 }
