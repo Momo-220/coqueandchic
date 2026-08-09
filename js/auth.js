@@ -48,3 +48,5 @@ const isLoginPage = window.location.pathname === '/admin' ||
 if (isLoginPage && auth.check()) {
   window.location.href = '/admin/dashboard.html';
 }
+
+// Build trigger: v1.0.2 - Redis connection loaded
