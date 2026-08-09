@@ -66,12 +66,12 @@ export const compressImage = (dataURL, maxWidth = 1200, quality = 0.85) => {
     if (key === 'logo') {
       let settings = {};
       try {
-        const cached = localStorage.getItem('cc_settings');
+        const cached = sessionStorage.getItem('cc_settings');
         if (cached) settings = JSON.parse(cached);
       } catch (e) {}
 
       settings.logo = dataURL;
-      localStorage.setItem('cc_settings', JSON.stringify(settings));
+      sessionStorage.setItem('cc_settings', JSON.stringify(settings));
 
       try {
         const xhr = new XMLHttpRequest();
@@ -82,7 +82,7 @@ export const compressImage = (dataURL, maxWidth = 1200, quality = 0.85) => {
         console.warn('Failed to sync settings with uploaded logo:', e);
       }
     } else {
-      localStorage.setItem(IMG_PREFIX + key, dataURL);
+      sessionStorage.setItem(IMG_PREFIX + key, dataURL);
     }
     return dataURL;
   } catch (err) {
@@ -98,7 +98,7 @@ export const compressImage = (dataURL, maxWidth = 1200, quality = 0.85) => {
 export const getUploadedImage = (key) => {
   if (key === 'logo') {
     try {
-      const cached = localStorage.getItem('cc_settings');
+      const cached = sessionStorage.getItem('cc_settings');
       if (cached) {
         const settings = JSON.parse(cached);
         if (settings && settings.logo) return settings.logo;
@@ -110,7 +110,7 @@ export const getUploadedImage = (key) => {
       if (xhr.status === 200) {
         const settings = JSON.parse(xhr.responseText);
         if (settings && settings.logo) {
-          localStorage.setItem('cc_settings', xhr.responseText);
+          sessionStorage.setItem('cc_settings', xhr.responseText);
           return settings.logo;
         }
       }
@@ -118,7 +118,7 @@ export const getUploadedImage = (key) => {
       console.warn('Failed to load logo from settings:', e);
     }
   }
-  return localStorage.getItem(IMG_PREFIX + key);
+  return sessionStorage.getItem(IMG_PREFIX + key);
 };
 
 /**
@@ -139,12 +139,12 @@ export const deleteImage = (key) => {
   if (key === 'logo') {
     let settings = {};
     try {
-      const cached = localStorage.getItem('cc_settings');
+      const cached = sessionStorage.getItem('cc_settings');
       if (cached) settings = JSON.parse(cached);
     } catch (e) {}
 
     delete settings.logo;
-    localStorage.setItem('cc_settings', JSON.stringify(settings));
+    sessionStorage.setItem('cc_settings', JSON.stringify(settings));
 
     try {
       const xhr = new XMLHttpRequest();
@@ -155,7 +155,7 @@ export const deleteImage = (key) => {
       console.warn('Failed to sync settings after deleting logo:', e);
     }
   } else {
-    localStorage.removeItem(IMG_PREFIX + key);
+    sessionStorage.removeItem(IMG_PREFIX + key);
   }
 };
 /**

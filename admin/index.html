@@ -21,7 +21,9 @@
         <input type="text" name="user" placeholder="Identifiant" required>
         <div style="position: relative; width: 100%;">
           <input type="password" name="pass" id="passInput" placeholder="Mot de passe" required style="width: 100%; padding-right: 2.5rem; margin-bottom: 0;">
-          <button type="button" id="togglePassBtn" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 0; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; color: var(--gris);">👁️</button>
+          <button type="button" id="togglePassBtn" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--gris); width: 24px; height: 24px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
         </div>
         <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Se connecter</button>
       </form>

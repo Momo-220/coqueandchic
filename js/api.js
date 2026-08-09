@@ -42,14 +42,17 @@ const SEED_PRODUCTS = [
 const SEED_ORDERS = [];
 const SEED_MESSAGES = [];
 
-// Helpers localStorage with server synchronization
+// Helpers sessionStorage with server synchronization
 const get = (key) => {
-  try { return JSON.parse(localStorage.getItem(key)) || (key === DB_KEYS.settings ? {} : []); }
+  // Garder les favoris et le panier dans localStorage pour persistance client, le reste en sessionStorage
+  const storage = [DB_KEYS.favs, DB_KEYS.cart].includes(key) ? localStorage : sessionStorage;
+  try { return JSON.parse(storage.getItem(key)) || (key === DB_KEYS.settings ? {} : []); }
   catch { return key === DB_KEYS.settings ? {} : []; }
 };
 
 const set = (key, val) => {
-  localStorage.setItem(key, JSON.stringify(val));
+  const storage = [DB_KEYS.favs, DB_KEYS.cart].includes(key) ? localStorage : sessionStorage;
+  storage.setItem(key, JSON.stringify(val));
   if ([DB_KEYS.products, DB_KEYS.orders, DB_KEYS.messages, DB_KEYS.shipping, DB_KEYS.settings].includes(key)) {
     const endpoint = key === DB_KEYS.products ? 'products' : (key === DB_KEYS.orders ? 'orders' : (key === DB_KEYS.messages ? 'messages' : (key === DB_KEYS.shipping ? 'shipping' : 'settings')));
     fetch(`/api/${endpoint}`, {
@@ -210,7 +213,7 @@ export const api = {
         if (res.ok) {
           const data = await res.json();
           if (data !== null && data !== undefined) {
-            localStorage.setItem(ep.key, JSON.stringify(data));
+            sessionStorage.setItem(ep.key, JSON.stringify(data));
           }
         }
       } catch (e) {
