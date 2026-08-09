@@ -44,20 +44,6 @@ const SEED_MESSAGES = [];
 
 // Helpers localStorage with server synchronization
 const get = (key) => {
-  if ([DB_KEYS.products, DB_KEYS.orders, DB_KEYS.messages, DB_KEYS.shipping, DB_KEYS.settings].includes(key)) {
-    const endpoint = key === DB_KEYS.products ? 'products' : (key === DB_KEYS.orders ? 'orders' : (key === DB_KEYS.messages ? 'messages' : (key === DB_KEYS.shipping ? 'shipping' : 'settings')));
-    try {
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', `/api/${endpoint}`, false);
-      xhr.send();
-      if (xhr.status === 200) {
-        const data = JSON.parse(xhr.responseText);
-        if (data !== null && data !== undefined) return data;
-      }
-    } catch (e) {
-      console.warn(`Server unavailable for ${endpoint}, using localStorage:`, e);
-    }
-  }
   try { return JSON.parse(localStorage.getItem(key)) || (key === DB_KEYS.settings ? {} : []); }
   catch { return key === DB_KEYS.settings ? {} : []; }
 };
@@ -66,14 +52,11 @@ const set = (key, val) => {
   localStorage.setItem(key, JSON.stringify(val));
   if ([DB_KEYS.products, DB_KEYS.orders, DB_KEYS.messages, DB_KEYS.shipping, DB_KEYS.settings].includes(key)) {
     const endpoint = key === DB_KEYS.products ? 'products' : (key === DB_KEYS.orders ? 'orders' : (key === DB_KEYS.messages ? 'messages' : (key === DB_KEYS.shipping ? 'shipping' : 'settings')));
-    try {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', `/api/${endpoint}`, false);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(JSON.stringify(val));
-    } catch (e) {
-      console.warn(`Failed to sync ${endpoint} database file:`, e);
-    }
+    fetch(`/api/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(val)
+    }).catch(e => console.warn(`Asynchronous save failed for ${endpoint}:`, e));
   }
 };
 
@@ -212,6 +195,28 @@ export const api = {
     const updated = { ...current, ...newSettings };
     set(DB_KEYS.settings, updated);
     return updated;
+  },
+  syncAllFromDatabase: async () => {
+    const endpoints = [
+      { key: DB_KEYS.products, name: 'products' },
+      { key: DB_KEYS.orders, name: 'orders' },
+      { key: DB_KEYS.messages, name: 'messages' },
+      { key: DB_KEYS.shipping, name: 'shipping' },
+      { key: DB_KEYS.settings, name: 'settings' }
+    ];
+    await Promise.all(endpoints.map(async (ep) => {
+      try {
+        const res = await fetch(`/api/${ep.name}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data !== null && data !== undefined) {
+            localStorage.setItem(ep.key, JSON.stringify(data));
+          }
+        }
+      } catch (e) {
+        console.warn(`Asynchronous sync failed for ${ep.name}:`, e);
+      }
+    }));
   },
 };
 

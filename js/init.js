@@ -1,8 +1,5 @@
-// =============================================
-// COQUE & CHIC — Init minimal pour toutes les pages
-// Initialise : logo uploadé, badges, menu mobile
-// =============================================
 import { getUploadedImage } from './upload.js';
+import { api } from './api.js';
 
 function initLogo() {
   const uploaded = getUploadedImage('logo');
@@ -19,8 +16,6 @@ function initMenu() {
   const toggle = document.getElementById('menuToggle');
   const nav = document.getElementById('mainNav');
   if (!toggle || !nav) return;
-  // Ouvre la nav au clic sur le logo en mobile, ou via un bouton dédié
-  // Pour mobile, on va utiliser un système : clic sur le logo ouvre la nav
   const logo = document.querySelector('.logo');
   if (logo && window.innerWidth <= 768) {
     logo.style.cursor = 'pointer';
@@ -34,7 +29,10 @@ function initMenu() {
   toggle?.addEventListener('click', () => nav.classList.toggle('open'));
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    await api.syncAllFromDatabase();
+  } catch (e) {}
   initLogo();
   initMenu();
 });

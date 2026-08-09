@@ -28,6 +28,31 @@ export const auth = {
 // Bind auto sur le formulaire de login
 const form = document.getElementById('loginForm');
 if (form) {
+  // Pré-chargement asynchrone des identifiants depuis MongoDB
+  const preFetch = async () => {
+    try {
+      await api.syncAllFromDatabase();
+    } catch(e) {}
+  };
+  
+  document.addEventListener('DOMContentLoaded', preFetch);
+  preFetch(); // Appel immédiat au cas où le DOM est déjà chargé
+
+  // Bouton pour afficher/masquer le mot de passe
+  const toggleBtn = document.getElementById('togglePassBtn');
+  const passInput = document.getElementById('passInput');
+  if (toggleBtn && passInput) {
+    toggleBtn.addEventListener('click', () => {
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.textContent = '🙈';
+      } else {
+        passInput.type = 'password';
+        toggleBtn.textContent = '👁️';
+      }
+    });
+  }
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
