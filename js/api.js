@@ -39,16 +39,8 @@ const SEED_PRODUCTS = [
   { id: 'nw12', name: 'Nouveau Produit 12', category: 'coques', price: 5000, image: 'images/WhatsApp Image 2026-07-03 at 00.40.43.jpeg', description: 'À modifier dans l\'admin', stock: 10, featured: true },
 ];
 
-const SEED_ORDERS = [
-  { id: 'o1', date: '2026-06-28', customer: 'Aïcha D.', items: [{name: 'Coque iPhone 15 Pro', qty: 1, price: 8000}], total: 8000, status: 'livrée', phone: '+225 07 00 00 00' },
-  { id: 'o2', date: '2026-07-01', customer: 'Mariam K.', items: [{name: 'Bracelet cœur doré', qty: 2, price: 4500}], total: 9000, status: 'en préparation', phone: '+225 07 01 00 00' },
-  { id: 'o3', date: '2026-07-02', customer: 'Fatou S.', items: [{name: 'Boucles d\'oreilles', qty: 1, price: 3500}], total: 3500, status: 'en attente', phone: '+225 07 02 00 00' },
-];
-
-const SEED_MESSAGES = [
-  { id: 'm1', from: 'Aïcha D.', text: 'Bonjour, est-ce que la coque iPhone 15 est dispo en noir ?', date: '2026-07-02 14:32', read: false },
-  { id: 'm2', from: 'Mariam K.', text: 'Merci pour la livraison rapide ! 💕', date: '2026-07-01 10:15', read: true },
-];
+const SEED_ORDERS = [];
+const SEED_MESSAGES = [];
 
 // Helpers localStorage with server synchronization
 const get = (key) => {
@@ -60,7 +52,7 @@ const get = (key) => {
       xhr.send();
       if (xhr.status === 200) {
         const data = JSON.parse(xhr.responseText);
-        if (data && (Array.isArray(data) ? data.length > 0 : Object.keys(data).length > 0)) return data;
+        if (data !== null && data !== undefined) return data;
       }
     } catch (e) {
       console.warn(`Server unavailable for ${endpoint}, using localStorage:`, e);
@@ -91,9 +83,6 @@ const init = () => {
   if (!currentProducts || currentProducts.length === 0) {
     set(DB_KEYS.products, SEED_PRODUCTS);
   }
-
-  if (!localStorage.getItem(DB_KEYS.orders)) set(DB_KEYS.orders, SEED_ORDERS);
-  if (!localStorage.getItem(DB_KEYS.messages)) set(DB_KEYS.messages, SEED_MESSAGES);
 };
 init();
 

@@ -62,8 +62,6 @@ function render() {
   summaryEl.innerHTML = `
     <h3>Récapitulatif</h3>
     <div class="summary-row"><span>Sous-total</span><span>${formatPrice(subtotal)}</span></div>
-    <div class="summary-row"><span>Livraison Côte d'Ivoire</span><span>${defaultDelivery === 0 ? '<span style="color:#10b981">Gratuite</span>' : formatPrice(defaultDelivery)}</span></div>
-    ${defaultDelivery === 0 ? '' : `<p style="font-size:0.85rem; color: var(--gris); margin: 0.5rem 0;">Plus que ${formatPrice(20000 - subtotal)} pour la livraison gratuite en Côte d'Ivoire 🌸</p>`}
     <div class="summary-row summary-total"><span>Total (est.)</span><span>${formatPrice(subtotal + defaultDelivery)}</span></div>
     <button class="btn btn-primary" id="checkoutBtn" style="width:100%; margin-top: var(--space-md);">Commander</button>
     <a href="https://wa.me/${ownerWa}?text=${encodeURIComponent('Bonjour, je souhaite commander :\n' + items.map(i => `- ${i.name} x${i.qty} = ${formatPrice(i.subtotal)}`).join('\n') + '\n\nSous-total : ' + formatPrice(subtotal))}" class="btn btn-outline" style="width:100%; margin-top: 0.5rem;" target="_blank">
