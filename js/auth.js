@@ -2,11 +2,12 @@ const AUTH_KEY = 'cc_auth';
 
 export const auth = {
   login: async (user, pass) => {
+    const payload = JSON.stringify({ user, pass });
     try {
-      const res = await fetch('/api/login', {
+      let res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user, pass })
+        body: payload
       });
       if (res.ok) {
         const data = await res.json();
@@ -15,9 +16,23 @@ export const auth = {
           return true;
         }
       }
-    } catch (e) {
-      console.error('Login error:', e);
-    }
+    } catch (e) {}
+
+    try {
+      let res = await fetch('https://www.coqueandchic.shop/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          sessionStorage.setItem(AUTH_KEY, JSON.stringify({ user: user.trim(), loggedAt: Date.now() }));
+          return true;
+        }
+      }
+    } catch (e) {}
+
     return false;
   },
   logout: () => {

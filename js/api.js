@@ -14,6 +14,31 @@ const DB_KEYS = {
   settings: 'cc_settings',
 };
 
+// Helper de lecture API sécurisé multi-domaines (gère les redirections www / non-www)
+async function safeFetchApi(endpoint) {
+  const ts = Date.now();
+  const relativeUrl = `/api/${endpoint}?t=${ts}`;
+  const absoluteUrl = `https://www.coqueandchic.shop/api/${endpoint}?t=${ts}`;
+
+  try {
+    let res = await fetch(relativeUrl);
+    if (res.ok) {
+      const data = await res.json();
+      if (data !== null && data !== undefined) return data;
+    }
+  } catch (e) {}
+
+  try {
+    let res = await fetch(absoluteUrl);
+    if (res.ok) {
+      const data = await res.json();
+      if (data !== null && data !== undefined) return data;
+    }
+  } catch (e) {}
+
+  return null;
+}
+
 // Helpers sessionStorage & localStorage
 const get = (key) => {
   const storage = [DB_KEYS.favs, DB_KEYS.cart].includes(key) ? localStorage : sessionStorage;
@@ -26,11 +51,18 @@ const set = (key, val) => {
   storage.setItem(key, JSON.stringify(val));
   if ([DB_KEYS.products, DB_KEYS.orders, DB_KEYS.messages, DB_KEYS.shipping, DB_KEYS.settings].includes(key)) {
     const endpoint = key === DB_KEYS.products ? 'products' : (key === DB_KEYS.orders ? 'orders' : (key === DB_KEYS.messages ? 'messages' : (key === DB_KEYS.shipping ? 'shipping' : 'settings')));
+    const bodyStr = JSON.stringify(val);
     fetch(`/api/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(val)
-    }).catch(e => console.warn(`Enregistrement asynchrone échoué pour ${endpoint}:`, e));
+      body: bodyStr
+    }).catch(() => {
+      fetch(`https://www.coqueandchic.shop/api/${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: bodyStr
+      }).catch(e => console.warn(`Enregistrement asynchrone échoué pour ${endpoint}:`, e));
+    });
   }
 };
 
@@ -153,17 +185,10 @@ export const api = {
     return get(DB_KEYS.settings) || {};
   },
   fetchSettings: async () => {
-    try {
-      const res = await fetch('/api/settings?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        if (data && typeof data === 'object') {
-          sessionStorage.setItem(DB_KEYS.settings, JSON.stringify(data));
-          return data;
-        }
-      }
-    } catch (e) {
-      console.warn('Lecture directe MongoDB échouée pour settings:', e);
+    const data = await safeFetchApi('settings');
+    if (data && typeof data === 'object') {
+      sessionStorage.setItem(DB_KEYS.settings, JSON.stringify(data));
+      return data;
     }
     return api.getSettings();
   },
@@ -174,51 +199,31 @@ export const api = {
     return updated;
   },
   fetchProducts: async (filter = {}) => {
-    try {
-      const res = await fetch('/api/products?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          sessionStorage.setItem(DB_KEYS.products, JSON.stringify(data));
-        }
-      }
-    } catch (e) {}
+    const data = await safeFetchApi('products');
+    if (Array.isArray(data)) {
+      sessionStorage.setItem(DB_KEYS.products, JSON.stringify(data));
+    }
     return api.getProducts(filter);
   },
   fetchOrders: async () => {
-    try {
-      const res = await fetch('/api/orders?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          sessionStorage.setItem(DB_KEYS.orders, JSON.stringify(data));
-        }
-      }
-    } catch (e) {}
+    const data = await safeFetchApi('orders');
+    if (Array.isArray(data)) {
+      sessionStorage.setItem(DB_KEYS.orders, JSON.stringify(data));
+    }
     return api.getOrders();
   },
   fetchMessages: async () => {
-    try {
-      const res = await fetch('/api/messages?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          sessionStorage.setItem(DB_KEYS.messages, JSON.stringify(data));
-        }
-      }
-    } catch (e) {}
+    const data = await safeFetchApi('messages');
+    if (Array.isArray(data)) {
+      sessionStorage.setItem(DB_KEYS.messages, JSON.stringify(data));
+    }
     return api.getMessages();
   },
   fetchShippingRates: async () => {
-    try {
-      const res = await fetch('/api/shipping?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          sessionStorage.setItem(DB_KEYS.shipping, JSON.stringify(data));
-        }
-      }
-    } catch (e) {}
+    const data = await safeFetchApi('shipping');
+    if (Array.isArray(data)) {
+      sessionStorage.setItem(DB_KEYS.shipping, JSON.stringify(data));
+    }
     return api.getShippingRates();
   },
   syncAllFromDatabase: async () => {
@@ -230,16 +235,9 @@ export const api = {
       { key: DB_KEYS.settings, name: 'settings' }
     ];
     await Promise.all(endpoints.map(async (ep) => {
-      try {
-        const res = await fetch(`/api/${ep.name}?t=` + Date.now());
-        if (res.ok) {
-          const data = await res.json();
-          if (data !== null && data !== undefined) {
-            sessionStorage.setItem(ep.key, JSON.stringify(data));
-          }
-        }
-      } catch (e) {
-        console.warn(`Synchronisation échouée pour ${ep.name}:`, e);
+      const data = await safeFetchApi(ep.name);
+      if (data !== null && data !== undefined) {
+        sessionStorage.setItem(ep.key, JSON.stringify(data));
       }
     }));
   },
