@@ -94,7 +94,7 @@ export function bindProductEvents(scope = document) {
     const card = e.target.closest('.product-card');
     if (card) {
       const id = card.dataset.productId;
-      window.location.href = `produit.html?id=${id}`;
+      window.location.href = `/produit?id=${id}`;
     }
   });
 }
@@ -150,7 +150,7 @@ async function initHome() {
 
   categories.forEach(c => {
     const card = document.createElement('a');
-    card.href = `boutique.html?cat=${c.id}`;
+    card.href = `/boutique?cat=${c.id}`;
     card.className = 'product-card';
     card.style.textDecoration = 'none';
     card.innerHTML = `

@@ -29,7 +29,7 @@ function calcDelivery(countryCode, subtotal) {
 function render() {
   const items = cart.details();
   if (items.length === 0) {
-    itemsEl.innerHTML = `<div class="empty-cart"><p style="font-size:1.3rem; color: var(--gris-fonce);">🛍️ Votre panier est vide</p><a href="boutique.html" class="btn btn-primary" style="margin-top: var(--space-md);">Découvrir la boutique</a></div>`;
+    itemsEl.innerHTML = `<div class="empty-cart"><p style="font-size:1.3rem; color: var(--gris-fonce);">🛍️ Votre panier est vide</p><a href="/boutique" class="btn btn-primary" style="margin-top: var(--space-md);">Découvrir la boutique</a></div>`;
     summaryEl.innerHTML = '';
     return;
   }

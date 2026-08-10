@@ -10,7 +10,7 @@ async function initProduitDetail() {
     const container = document.getElementById('productDetail');
 
     if (!product) {
-      container.innerHTML = '<p style="text-align:center; padding: var(--space-xl); color: var(--charcoal);">Produit introuvable. <a href="boutique.html" style="color: var(--rose-deep); text-decoration: underline;">Retour à la boutique</a></p>';
+      container.innerHTML = '<p style="text-align:center; padding: var(--space-xl); color: var(--charcoal);">Produit introuvable. <a href="/boutique" style="color: var(--rose-deep); text-decoration: underline;">Retour à la boutique</a></p>';
     } else {
     let qty = 1;
     const isFav = api.getFavs().includes(id);
