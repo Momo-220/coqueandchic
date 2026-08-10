@@ -1,0 +1,15 @@
+# Robots.txt — Coque & Chic
+# https://www.coqueandchic.shop
+
+User-agent: *
+Allow: /
+
+# Bloquer les sections admin des moteurs de recherche
+Disallow: /admin/
+Disallow: /api/
+Disallow: /data/
+Disallow: /scripts/
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://www.coqueandchic.shop/sitemap.xml
