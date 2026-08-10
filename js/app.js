@@ -131,7 +131,7 @@ function initMenu() {
 }
 
 // ============= INIT PAGE D'ACCUEIL =============
-function initHome() {
+async function initHome() {
   const catGrid = document.getElementById('categoriesGrid');
   const featGrid = document.getElementById('featuredGrid');
   if (!catGrid || !featGrid) return;
@@ -141,9 +141,12 @@ function initHome() {
     { id: 'accessoires', name: 'Accessoires de charme', img: 'https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?w=600', count: 0 },
   ];
 
-  // Compte par catégorie
-  const all = api.getProducts();
+  // Compte par catégorie depuis MongoDB Atlas
+  const all = await api.fetchProducts();
   categories.forEach(c => c.count = all.filter(p => p.category === c.id).length);
+
+  catGrid.innerHTML = '';
+  featGrid.innerHTML = '';
 
   categories.forEach(c => {
     const card = document.createElement('a');
@@ -166,16 +169,17 @@ function initHome() {
   });
 
   // Produits vedettes
-  api.getProducts({ featured: true }).forEach(p => featGrid.appendChild(renderProductCard(p)));
+  const featured = all.filter(p => p.featured);
+  featured.forEach(p => featGrid.appendChild(renderProductCard(p)));
 }
 
 // ============= INIT GLOBAL =============
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initLogo();
   initHeader();
   initMenu();
   initReveal();
   updateBadge();
   bindProductEvents();
-  initHome();
+  await initHome();
 });

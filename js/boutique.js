@@ -19,10 +19,10 @@ if (params.get('cat')) {
   });
 }
 
-function render() {
-  const products = api.getProducts({ category: currentCat, search: currentSearch });
+async function render() {
+  const products = await api.fetchProducts({ category: currentCat, search: currentSearch });
   grid.innerHTML = '';
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
     noResults.style.display = 'block';
     return;
   }
@@ -30,26 +30,26 @@ function render() {
   products.forEach(p => grid.appendChild(renderProductCard(p)));
 }
 
-filtersEl?.addEventListener('click', (e) => {
+filtersEl?.addEventListener('click', async (e) => {
   const chip = e.target.closest('.filter-chip');
   if (!chip) return;
   filtersEl.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
   chip.classList.add('active');
   currentCat = chip.dataset.cat;
-  render();
+  await render();
 });
 
 let timeout;
 searchInput?.addEventListener('input', (e) => {
   clearTimeout(timeout);
-  timeout = setTimeout(() => {
+  timeout = setTimeout(async () => {
     currentSearch = e.target.value;
-    render();
+    await render();
   }, 200);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   updateBadge();
-  render();
+  await render();
   bindProductEvents();
 });

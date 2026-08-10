@@ -1,15 +1,17 @@
 import { api, formatPrice } from './api.js';
 import { cart, updateBadge, toast } from './cart.js';
 
-try {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  const product = api.getProduct(id);
-  const container = document.getElementById('productDetail');
+async function initProduitDetail() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    await api.fetchProducts();
+    const product = api.getProduct(id);
+    const container = document.getElementById('productDetail');
 
-  if (!product) {
-    container.innerHTML = '<p style="text-align:center; padding: var(--space-xl); color: var(--charcoal);">Produit introuvable. <a href="boutique.html" style="color: var(--rose-deep); text-decoration: underline;">Retour à la boutique</a></p>';
-  } else {
+    if (!product) {
+      container.innerHTML = '<p style="text-align:center; padding: var(--space-xl); color: var(--charcoal);">Produit introuvable. <a href="boutique.html" style="color: var(--rose-deep); text-decoration: underline;">Retour à la boutique</a></p>';
+    } else {
     let qty = 1;
     const isFav = api.getFavs().includes(id);
     container.innerHTML = `
@@ -82,11 +84,15 @@ try {
       api.toggleFav(id);
       location.reload();
     };
+    }
+  } catch (err) {
+    console.error("Error in produit.js:", err);
+    const root = document.getElementById('productDetail') || document.body;
+    root.innerHTML = `<div style="color:red; padding:20px; background:#ffebee; border:1px solid red; margin:20px; font-family: sans-serif;">Error: ${err.message}<br><pre>${err.stack}</pre></div>`;
   }
-} catch (err) {
-  console.error("Error in produit.js:", err);
-  const root = document.getElementById('productDetail') || document.body;
-  root.innerHTML = `<div style="color:red; padding:20px; background:#ffebee; border:1px solid red; margin:20px; font-family: sans-serif;">Error: ${err.message}<br><pre>${err.stack}</pre></div>`;
 }
 
-document.addEventListener('DOMContentLoaded', updateBadge);
+document.addEventListener('DOMContentLoaded', async () => {
+  updateBadge();
+  await initProduitDetail();
+});
