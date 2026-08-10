@@ -115,11 +115,11 @@
     async function initSettings() {
       // Charge Settings live depuis MongoDB Atlas
       const settings = await api.fetchSettings();
-      document.getElementById('adminUser').value = settings.adminUser || 'admin';
-      document.getElementById('adminPass').value = settings.adminPass || 'admin';
-      document.getElementById('ownerPhone').value = settings.ownerPhone || '+225 07 68 61 33 28';
-      document.getElementById('transferPhone').value = settings.transferPhone || '+225 07 15 26 62 21';
-      document.getElementById('beneficiaryName').value = settings.beneficiaryName || 'TRAORE AMINATA';
+      document.getElementById('adminUser').value = settings.adminUser || '';
+      document.getElementById('adminPass').value = settings.adminPass || '';
+      document.getElementById('ownerPhone').value = settings.ownerPhone || '';
+      document.getElementById('transferPhone').value = settings.transferPhone || '';
+      document.getElementById('beneficiaryName').value = settings.beneficiaryName || '';
 
       // Charge Shipping Rates live depuis MongoDB Atlas
       rates = await api.fetchShippingRates();

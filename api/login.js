@@ -15,9 +15,9 @@ export default async function handler(req, res) {
 
   try {
     const { user, pass } = req.body;
-    const settings = await dbGet('settings', 'settings.json');
-    const validUser = (settings.adminUser || 'admin').trim();
-    const validPass = (settings.adminPass || 'admin').trim();
+    const settings = await dbGet('settings');
+    const validUser = (settings.adminUser || '').trim();
+    const validPass = (settings.adminPass || '').trim();
 
     const cleanUser = (user || '').trim();
     const cleanPass = (pass || '').trim();
