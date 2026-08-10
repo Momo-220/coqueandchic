@@ -1,4 +1,4 @@
-import { dbGet, dbSet } from './db.js';
+import { dbGet, dbSet, dbAdd, dbUpdate, dbDelete } from './db.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -21,8 +21,20 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const data = req.body;
-      await dbSet('products', data);
-      return res.status(200).json({ status: 'ok' });
+      if (data && typeof data === 'object' && data.action) {
+        if (data.action === 'add') {
+          await dbAdd('products', data.product);
+        } else if (data.action === 'update') {
+          await dbUpdate('products', { id: data.id }, data.product);
+        } else if (data.action === 'delete') {
+          await dbDelete('products', { id: data.id });
+        }
+        return res.status(200).json({ status: 'ok' });
+      } else {
+        // Fallback rétrocompatible pour l'envoi de la liste entière
+        await dbSet('products', data);
+        return res.status(200).json({ status: 'ok' });
+      }
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }

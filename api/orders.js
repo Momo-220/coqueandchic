@@ -1,4 +1,4 @@
-import { dbGet, dbSet } from './db.js';
+import { dbGet, dbSet, dbAdd, dbUpdate, dbDelete } from './db.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -21,8 +21,20 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const data = req.body;
-      await dbSet('orders', data);
-      return res.status(200).json({ status: 'ok' });
+      if (data && typeof data === 'object' && data.action) {
+        if (data.action === 'add') {
+          await dbAdd('orders', data.order);
+        } else if (data.action === 'update') {
+          await dbUpdate('orders', { id: data.id }, data.order);
+        } else if (data.action === 'delete') {
+          await dbDelete('orders', { id: data.id });
+        }
+        return res.status(200).json({ status: 'ok' });
+      } else {
+        // Fallback rétrocompatible
+        await dbSet('orders', data);
+        return res.status(200).json({ status: 'ok' });
+      }
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }

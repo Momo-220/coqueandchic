@@ -56,3 +56,21 @@ export async function dbSet(collectionName, value) {
   }
   return true;
 }
+
+export async function dbAdd(collectionName, item) {
+  const db = await connectToDatabase();
+  await db.collection(collectionName).insertOne(item);
+  return true;
+}
+
+export async function dbUpdate(collectionName, query, updateValues) {
+  const db = await connectToDatabase();
+  await db.collection(collectionName).updateOne(query, { $set: updateValues });
+  return true;
+}
+
+export async function dbDelete(collectionName, query) {
+  const db = await connectToDatabase();
+  await db.collection(collectionName).deleteOne(query);
+  return true;
+}

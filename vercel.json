@@ -21,6 +21,14 @@
     {
       "src": "/api/settings",
       "dest": "/api/settings.js"
+    },
+    {
+      "src": "/api/login",
+      "dest": "/api/login.js"
+    },
+    {
+      "src": "/api/debug",
+      "dest": "/api/debug.js"
     }
   ]
 }

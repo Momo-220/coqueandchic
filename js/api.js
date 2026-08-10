@@ -46,11 +46,26 @@ const get = (key) => {
   catch { return key === DB_KEYS.settings ? {} : []; }
 };
 
+const postAction = (endpoint, action, id, payload) => {
+  const bodyStr = JSON.stringify({ action, id, [endpoint.slice(0, -1)]: payload });
+  fetch(`/api/${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: bodyStr
+  }).catch(() => {
+    fetch(`https://www.coqueandchic.shop/api/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: bodyStr
+    }).catch(e => console.warn(`Enregistrement asynchrone échoué pour ${endpoint}:`, e));
+  });
+};
+
 const set = (key, val) => {
   const storage = [DB_KEYS.favs, DB_KEYS.cart].includes(key) ? localStorage : sessionStorage;
   storage.setItem(key, JSON.stringify(val));
-  if ([DB_KEYS.products, DB_KEYS.orders, DB_KEYS.messages, DB_KEYS.shipping, DB_KEYS.settings].includes(key)) {
-    const endpoint = key === DB_KEYS.products ? 'products' : (key === DB_KEYS.orders ? 'orders' : (key === DB_KEYS.messages ? 'messages' : (key === DB_KEYS.shipping ? 'shipping' : 'settings')));
+  if ([DB_KEYS.shipping, DB_KEYS.settings].includes(key)) {
+    const endpoint = key === DB_KEYS.shipping ? 'shipping' : 'settings';
     const bodyStr = JSON.stringify(val);
     fetch(`/api/${endpoint}`, {
       method: 'POST',
@@ -91,7 +106,8 @@ export const api = {
     const list = Array.isArray(products) ? products : [];
     const newP = { id: 'p' + Date.now(), ...data };
     list.unshift(newP);
-    set(DB_KEYS.products, list);
+    sessionStorage.setItem(DB_KEYS.products, JSON.stringify(list));
+    postAction('products', 'add', newP.id, newP);
     return newP;
   },
   updateProduct: (id, data) => {
@@ -100,14 +116,16 @@ export const api = {
     const idx = list.findIndex(p => p.id === id);
     if (idx === -1) return null;
     list[idx] = { ...list[idx], ...data };
-    set(DB_KEYS.products, list);
+    sessionStorage.setItem(DB_KEYS.products, JSON.stringify(list));
+    postAction('products', 'update', id, list[idx]);
     return list[idx];
   },
   deleteProduct: (id) => {
     const products = get(DB_KEYS.products);
     const list = Array.isArray(products) ? products : [];
     const filtered = list.filter(p => p.id !== id);
-    set(DB_KEYS.products, filtered);
+    sessionStorage.setItem(DB_KEYS.products, JSON.stringify(filtered));
+    postAction('products', 'delete', id);
     return true;
   },
 
@@ -121,7 +139,8 @@ export const api = {
     const list = Array.isArray(orders) ? orders : [];
     const newO = { id: 'o' + Date.now(), date: new Date().toISOString().split('T')[0], status: 'en attente', ...data };
     list.unshift(newO);
-    set(DB_KEYS.orders, list);
+    sessionStorage.setItem(DB_KEYS.orders, JSON.stringify(list));
+    postAction('orders', 'add', newO.id, newO);
     return newO;
   },
   updateOrder: (id, data) => {
@@ -130,7 +149,8 @@ export const api = {
     const idx = list.findIndex(o => o.id === id);
     if (idx === -1) return null;
     list[idx] = { ...list[idx], ...data };
-    set(DB_KEYS.orders, list);
+    sessionStorage.setItem(DB_KEYS.orders, JSON.stringify(list));
+    postAction('orders', 'update', id, list[idx]);
     return list[idx];
   },
 
@@ -144,14 +164,19 @@ export const api = {
     const list = Array.isArray(messages) ? messages : [];
     const newM = { id: 'm' + Date.now(), date: new Date().toISOString().replace('T', ' ').slice(0, 16), read: false, ...data };
     list.unshift(newM);
-    set(DB_KEYS.messages, list);
+    sessionStorage.setItem(DB_KEYS.messages, JSON.stringify(list));
+    postAction('messages', 'add', newM.id, newM);
     return newM;
   },
   markRead: (id) => {
     const messages = get(DB_KEYS.messages);
     const list = Array.isArray(messages) ? messages : [];
     const m = list.find(x => x.id === id);
-    if (m) { m.read = true; set(DB_KEYS.messages, list); }
+    if (m) {
+      m.read = true;
+      sessionStorage.setItem(DB_KEYS.messages, JSON.stringify(list));
+      postAction('messages', 'update', id, m);
+    }
   },
 
   // Favoris
