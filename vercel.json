@@ -1,34 +1,16 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "routes": [
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" }
+  ],
+  "headers": [
     {
-      "src": "/api/products",
-      "dest": "/api/products.js"
-    },
-    {
-      "src": "/api/orders",
-      "dest": "/api/orders.js"
-    },
-    {
-      "src": "/api/messages",
-      "dest": "/api/messages.js"
-    },
-    {
-      "src": "/api/shipping",
-      "dest": "/api/shipping.js"
-    },
-    {
-      "src": "/api/settings",
-      "dest": "/api/settings.js"
-    },
-    {
-      "src": "/api/login",
-      "dest": "/api/login.js"
-    },
-    {
-      "src": "/api/debug",
-      "dest": "/api/debug.js"
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+      ]
     }
   ]
 }
