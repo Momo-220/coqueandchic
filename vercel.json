@@ -1,6 +1,17 @@
 {
   "version": 2,
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/boutique.html", "destination": "/boutique", "permanent": true },
+    { "source": "/contact.html", "destination": "/contact", "permanent": true },
+    { "source": "/panier.html", "destination": "/panier", "permanent": true },
+    { "source": "/produit.html", "destination": "/produit", "permanent": true }
+  ],
   "rewrites": [
+    { "source": "/boutique", "destination": "/boutique.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/panier", "destination": "/panier.html" },
+    { "source": "/produit", "destination": "/produit.html" },
     { "source": "/api/(.*)", "destination": "/api/$1" }
   ],
   "headers": [
