@@ -63,14 +63,7 @@ const set = (key, val) => {
   }
 };
 
-// Initialisation seed
-const init = () => {
-  let currentProducts = get(DB_KEYS.products);
-  if (!currentProducts || currentProducts.length === 0) {
-    set(DB_KEYS.products, SEED_PRODUCTS);
-  }
-};
-init();
+
 
 // ============= API =============
 export const api = {

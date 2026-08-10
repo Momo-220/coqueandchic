@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const data = await dbGet('messages', 'messages.json');
+      const data = await dbGet('messages');
       return res.status(200).json(data || []);
     } catch (e) {
       return res.status(500).json({ error: e.message });
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const data = req.body;
-      await dbSet('messages', data, 'messages.json');
+      await dbSet('messages', data);
       return res.status(200).json({ status: 'ok' });
     } catch (e) {
       return res.status(500).json({ error: e.message });

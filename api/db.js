@@ -1,6 +1,4 @@
 import { MongoClient } from 'mongodb';
-import fs from 'fs';
-import path from 'path';
 
 let cachedClient = null;
 let cachedDb = null;
@@ -28,47 +26,20 @@ async function connectToDatabase() {
   }
 }
 
-export async function dbGet(collectionName, fallbackFile) {
+export async function dbGet(collectionName) {
   const db = await connectToDatabase();
-  const count = await db.collection(collectionName).countDocuments();
 
-  if (count > 0) {
-    // Source de vérité 100% MongoDB Atlas
-    if (collectionName === 'settings') {
-      const doc = await db.collection(collectionName).findOne({});
-      if (doc) {
-        const { _id, ...rest } = doc;
-        return rest;
-      }
-      return {};
-    } else {
-      const docs = await db.collection(collectionName).find({}).toArray();
-      return docs.map(({ _id, ...rest }) => rest);
+  if (collectionName === 'settings') {
+    const doc = await db.collection(collectionName).findOne({});
+    if (doc) {
+      const { _id, ...rest } = doc;
+      return rest;
     }
+    return {};
   } else {
-    // Auto-Seeding : Uniquement exécuté la première fois si MongoDB est vide
-    const filePath = path.join(process.cwd(), 'data', fallbackFile);
-    let localData = null;
-    if (fs.existsSync(filePath)) {
-      try {
-        const content = fs.readFileSync(filePath, 'utf8');
-        localData = JSON.parse(content);
-      } catch (e) {
-        console.error(`Failed to parse local file ${fallbackFile}:`, e);
-      }
-    }
-
-    if (localData !== null) {
-      if (collectionName === 'settings') {
-        await db.collection(collectionName).replaceOne({}, localData, { upsert: true });
-      } else if (Array.isArray(localData) && localData.length > 0) {
-        await db.collection(collectionName).insertMany(localData);
-      }
-      return localData;
-    }
+    const docs = await db.collection(collectionName).find({}).toArray();
+    return docs.map(({ _id, ...rest }) => rest);
   }
-
-  return collectionName === 'settings' ? {} : [];
 }
 
 export async function dbSet(collectionName, value) {
@@ -77,7 +48,7 @@ export async function dbSet(collectionName, value) {
   if (collectionName === 'settings') {
     await db.collection(collectionName).replaceOne({}, value, { upsert: true });
   } else {
-    // Écriture 100% exclusive sur MongoDB Atlas (zéro fichier local créé ou modifié)
+    // Écriture 100% directe et définitive sur MongoDB Atlas
     await db.collection(collectionName).deleteMany({});
     if (Array.isArray(value) && value.length > 0) {
       await db.collection(collectionName).insertMany(value);
