@@ -46,7 +46,7 @@ export async function dbSet(collectionName, value) {
   const db = await connectToDatabase();
   
   if (collectionName === 'settings') {
-    await db.collection(collectionName).replaceOne({}, value, { upsert: true });
+    await db.collection(collectionName).updateOne({}, { $set: value }, { upsert: true });
   } else {
     // Écriture 100% directe et définitive sur MongoDB Atlas
     await db.collection(collectionName).deleteMany({});
