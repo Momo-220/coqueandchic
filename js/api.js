@@ -133,6 +133,7 @@ export const api = {
     const newP = { id: 'p' + Date.now(), ...data };
     list.unshift(newP);
     _productsCache = list; // mise à jour locale immédiate
+    try { localStorage.setItem('cc_products_cache', JSON.stringify(list)); } catch(e){}
     postAction('products', 'add', newP.id, newP);
     // Après écriture → forcer re-fetch depuis DB au prochain chargement
     setTimeout(() => { _productsCache = null; }, 3000);
@@ -144,6 +145,7 @@ export const api = {
     if (idx === -1) return null;
     list[idx] = { ...list[idx], ...data };
     _productsCache = list;
+    try { localStorage.setItem('cc_products_cache', JSON.stringify(list)); } catch(e){}
     postAction('products', 'update', id, list[idx]);
     setTimeout(() => { _productsCache = null; }, 3000);
     return list[idx];
@@ -151,6 +153,7 @@ export const api = {
   deleteProduct: (id) => {
     const list = Array.isArray(_productsCache) ? _productsCache.filter(p => p.id !== id) : [];
     _productsCache = list;
+    try { localStorage.setItem('cc_products_cache', JSON.stringify(list)); } catch(e){}
     postAction('products', 'delete', id);
     setTimeout(() => { _productsCache = null; }, 3000);
     return true;
@@ -251,14 +254,37 @@ export const api = {
     return updated;
   },
   fetchProducts: async (filter = {}) => {
-    // Si déjà en cache mémoire, pas besoin de refetch (sauf si forcé)
-    if (!_productsCache) {
-      const data = await safeFetchApi('products');
+    // 1. Charger depuis le cache mémoire en priorité
+    if (_productsCache) {
+      return api.getProducts(filter);
+    }
+
+    // 2. Charger depuis localStorage pour un affichage instantané (0s de chargement)
+    try {
+      const cached = localStorage.getItem('cc_products_cache');
+      if (cached) {
+        _productsCache = JSON.parse(cached);
+      }
+    } catch (e) {}
+
+    // 3. Lancer la requête réseau en arrière-plan pour rafraîchir le cache
+    const fetchPromise = safeFetchApi('products').then(data => {
       if (Array.isArray(data)) {
         _productsCache = data;
+        try {
+          localStorage.setItem('cc_products_cache', JSON.stringify(data));
+        } catch (e) {}
       }
+      return api.getProducts(filter);
+    }).catch(() => api.getProducts(filter));
+
+    // Si on a du cache, on le renvoie immédiatement sans bloquer l'utilisateur
+    if (_productsCache && _productsCache.length > 0) {
+      return api.getProducts(filter);
     }
-    return api.getProducts(filter);
+
+    // Sinon, on attend la réponse réseau
+    return fetchPromise;
   },
   fetchOrders: async () => {
     const data = await safeFetchApi('orders');

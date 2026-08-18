@@ -186,8 +186,8 @@ function render() {
         </div>
         <p style="margin: 0 0 0.5rem 0; line-height: 1.4;">Effectuez le transfert vers le numéro : <strong style="user-select: all; color: #1dc5d8;">${tPhone}</strong></p>
         <div style="margin-bottom: 0.75rem;">
-          <a href="https://wave.com/pay/${tPhone.replace(/\D/g, '')}" target="_blank" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem; font-size: 0.8rem; border-color: #1dc5d8; color: #1dc5d8; border-radius: 6px; text-decoration: none; font-weight: 700;">
-            <span>Ouvrir l'application Wave</span> ➔
+          <a href="wave://" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem; font-size: 0.8rem; border-color: #1dc5d8; color: #1dc5d8; border-radius: 6px; text-decoration: none; font-weight: 700;">
+            <span>Ouvrir l'application Wave (sur mobile)</span> ➔
           </a>
         </div>
         <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Numéro émetteur / Référence du transfert :</label>

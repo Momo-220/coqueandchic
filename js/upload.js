@@ -31,7 +31,7 @@ export const readImageAsDataURL = (file) => {
  * @param {number} quality - Qualité 0-1 (défaut 0.85)
  * @returns {Promise<string>} DataURL compressé
  */
-export const compressImage = (dataURL, maxWidth = 1200, quality = 0.85) => {
+export const compressImage = (dataURL, maxWidth = 600, quality = 0.7) => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
