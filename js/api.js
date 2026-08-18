@@ -4,7 +4,6 @@
 import { resolveImage } from './upload.js';
 
 const DB_KEYS = {
-  products: 'cc_products',
   orders: 'cc_orders',
   messages: 'cc_messages',
   favs: 'cc_favorites',
@@ -13,6 +12,9 @@ const DB_KEYS = {
   shipping: 'cc_shipping',
   settings: 'cc_settings',
 };
+
+// Cache mémoire pour les produits (images base64 ~6MB dépassent sessionStorage 5MB)
+let _productsCache = null;
 
 // Helper de lecture API sécurisé multi-domaines (gère les redirections www / non-www)
 async function safeFetchApi(endpoint) {
@@ -98,46 +100,43 @@ const set = (key, val) => {
 export const api = {
   // Produits
   getProducts: (filter = {}) => {
-    let list = get(DB_KEYS.products);
-    if (!Array.isArray(list)) list = [];
+    let list = Array.isArray(_productsCache) ? [..._productsCache] : [];
     if (filter.category) list = list.filter(p => p.category === filter.category);
     if (filter.featured) list = list.filter(p => p.featured);
     if (filter.search) {
       const q = filter.search.toLowerCase();
-      list = list.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+      list = list.filter(p =>
+        (p.name || '').toLowerCase().includes(q) ||
+        (p.description || '').toLowerCase().includes(q)
+      );
     }
     return list.map(p => ({ ...p, image: resolveImage(p.id, p.image) }));
   },
   getProduct: (id) => {
-    const list = get(DB_KEYS.products);
-    if (!Array.isArray(list)) return null;
+    const list = Array.isArray(_productsCache) ? _productsCache : [];
     const p = list.find(x => x.id === id);
     return p ? { ...p, image: resolveImage(p.id, p.image) } : null;
   },
   addProduct: (data) => {
-    const products = get(DB_KEYS.products);
-    const list = Array.isArray(products) ? products : [];
+    const list = Array.isArray(_productsCache) ? [..._productsCache] : [];
     const newP = { id: 'p' + Date.now(), ...data };
     list.unshift(newP);
-    sessionStorage.setItem(DB_KEYS.products, JSON.stringify(list));
+    _productsCache = list;
     postAction('products', 'add', newP.id, newP);
     return newP;
   },
   updateProduct: (id, data) => {
-    const products = get(DB_KEYS.products);
-    const list = Array.isArray(products) ? products : [];
+    const list = Array.isArray(_productsCache) ? [..._productsCache] : [];
     const idx = list.findIndex(p => p.id === id);
     if (idx === -1) return null;
     list[idx] = { ...list[idx], ...data };
-    sessionStorage.setItem(DB_KEYS.products, JSON.stringify(list));
+    _productsCache = list;
     postAction('products', 'update', id, list[idx]);
     return list[idx];
   },
   deleteProduct: (id) => {
-    const products = get(DB_KEYS.products);
-    const list = Array.isArray(products) ? products : [];
-    const filtered = list.filter(p => p.id !== id);
-    sessionStorage.setItem(DB_KEYS.products, JSON.stringify(filtered));
+    const list = Array.isArray(_productsCache) ? _productsCache.filter(p => p.id !== id) : [];
+    _productsCache = list;
     postAction('products', 'delete', id);
     return true;
   },
@@ -237,9 +236,12 @@ export const api = {
     return updated;
   },
   fetchProducts: async (filter = {}) => {
-    const data = await safeFetchApi('products');
-    if (Array.isArray(data)) {
-      sessionStorage.setItem(DB_KEYS.products, JSON.stringify(data));
+    // Si déjà en cache mémoire, pas besoin de refetch (sauf si forcé)
+    if (!_productsCache) {
+      const data = await safeFetchApi('products');
+      if (Array.isArray(data)) {
+        _productsCache = data;
+      }
     }
     return api.getProducts(filter);
   },
