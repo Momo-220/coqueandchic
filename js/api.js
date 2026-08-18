@@ -121,8 +121,10 @@ export const api = {
     const list = Array.isArray(_productsCache) ? [..._productsCache] : [];
     const newP = { id: 'p' + Date.now(), ...data };
     list.unshift(newP);
-    _productsCache = list;
+    _productsCache = list; // mise à jour locale immédiate
     postAction('products', 'add', newP.id, newP);
+    // Après écriture → forcer re-fetch depuis DB au prochain chargement
+    setTimeout(() => { _productsCache = null; }, 3000);
     return newP;
   },
   updateProduct: (id, data) => {
@@ -132,12 +134,14 @@ export const api = {
     list[idx] = { ...list[idx], ...data };
     _productsCache = list;
     postAction('products', 'update', id, list[idx]);
+    setTimeout(() => { _productsCache = null; }, 3000);
     return list[idx];
   },
   deleteProduct: (id) => {
     const list = Array.isArray(_productsCache) ? _productsCache.filter(p => p.id !== id) : [];
     _productsCache = list;
     postAction('products', 'delete', id);
+    setTimeout(() => { _productsCache = null; }, 3000);
     return true;
   },
 
