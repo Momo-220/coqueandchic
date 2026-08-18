@@ -41,9 +41,9 @@ function render() {
         <div class="name">${item.name}</div>
         <div class="price">${formatPrice(item.price)}</div>
         <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
-          <button class="qty-btn" data-id="${item.id}" data-act="-" style="width:30px;height:30px;border-radius:50%;background:var(--rose-blush);color:var(--rose-deep);">−</button>
+          <button class="qty-btn" data-id="${item.id}" data-act="-" style="width:30px;height:30px;border-radius:50%;background:var(--rose-blush);color:var(--rose-deep);border:1px solid var(--rose-soft);cursor:pointer;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;">−</button>
           <span style="min-width:30px; text-align:center; font-weight:600;">${item.qty}</span>
-          <button class="qty-btn" data-id="${item.id}" data-act="+" style="width:30px;height:30px;border-radius:50%;background:var(--rose-blush);color:var(--rose-deep);">+</button>
+          <button class="qty-btn" data-id="${item.id}" data-act="+" style="width:30px;height:30px;border-radius:50%;background:var(--rose-blush);color:var(--rose-deep);border:1px solid var(--rose-soft);cursor:pointer;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;">+</button>
         </div>
       </div>
       <div style="text-align:right;">
@@ -412,5 +412,11 @@ function render() {
   };
 }
 
-document.addEventListener('DOMContentLoaded', () => { updateBadge(); render(); });
+async function init() {
+  updateBadge();
+  // Charger les produits en cache d'abord, sinon cart.details() retourne []
+  await api.fetchProducts();
+  render();
+}
 
+document.addEventListener('DOMContentLoaded', init);
