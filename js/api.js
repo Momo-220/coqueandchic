@@ -16,6 +16,17 @@ const DB_KEYS = {
 // Cache mémoire pour les produits (images base64 ~6MB dépassent sessionStorage 5MB)
 let _productsCache = null;
 
+const DEFAULT_SHIPPING_RATES = [
+  { "code": "CI", "country": "Côte d'Ivoire", "flag": "🇨🇮", "fee": 1500, "freeAbove": 20000, "prefix": "+225" },
+  { "code": "SN", "country": "Sénégal", "flag": "🇸🇳", "fee": 3500, "prefix": "+221" },
+  { "code": "ML", "country": "Mali", "flag": "🇲🇱", "fee": 3500, "prefix": "+223" },
+  { "code": "BF", "country": "Burkina Faso", "flag": "🇧🇫", "fee": 3500, "prefix": "+226" },
+  { "code": "BJ", "country": "Bénin", "flag": "🇧🇯", "fee": 3500, "prefix": "+229" },
+  { "code": "TG", "country": "Togo", "flag": "🇹🇬", "fee": 3500, "prefix": "+228" },
+  { "code": "GH", "country": "Ghana", "flag": "🇬🇭", "fee": 4500, "prefix": "+233" },
+  { "code": "CM", "country": "Cameroun", "flag": "🇨🇲", "fee": 5000, "prefix": "+237" }
+];
+
 // Helper de lecture API sécurisé multi-domaines (gère les redirections www / non-www)
 async function safeFetchApi(endpoint) {
   const ts = Date.now();
@@ -214,7 +225,7 @@ export const api = {
   // Shipping Rates
   getShippingRates: () => {
     const rates = get(DB_KEYS.shipping);
-    return Array.isArray(rates) ? rates : [];
+    return Array.isArray(rates) && rates.length > 0 ? rates : DEFAULT_SHIPPING_RATES;
   },
   updateShippingRates: (rates) => {
     set(DB_KEYS.shipping, rates);

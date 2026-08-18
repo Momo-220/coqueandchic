@@ -16,14 +16,18 @@ const CITIES_BY_COUNTRY = {
 };
 
 function getSelectedCountryInfo(countryCode) {
-  const rates = api.getShippingRates();
-  return rates.find(r => r.code === countryCode) || rates[0];
+  const rates = api.getShippingRates() || [];
+  const found = rates.find(r => r.code === countryCode);
+  if (found) return found;
+  if (rates.length > 0) return rates[0];
+  return { code: "CI", country: "Côte d'Ivoire", flag: "🇨🇮", fee: 1500, freeAbove: 20000, prefix: "+225" };
 }
 
 function calcDelivery(countryCode, subtotal) {
   const info = getSelectedCountryInfo(countryCode);
+  if (!info) return 1500;
   if (info.freeAbove && subtotal >= info.freeAbove) return 0;
-  return info.fee;
+  return info.fee ?? 1500;
 }
 
 function render() {
@@ -55,8 +59,8 @@ function render() {
 
   const subtotal = cart.total();
   const defaultDelivery = calcDelivery('CI', subtotal);
-  const settings = api.getSettings();
-  const ownerPhone = settings.ownerPhone || '+225 07 68 61 33 28';
+  const settings = api.getSettings() || {};
+  const ownerPhone = String(settings.ownerPhone || '+225 07 68 61 33 28');
   const ownerWa = ownerPhone.replace(/\D/g, '');
 
   summaryEl.innerHTML = `
@@ -414,8 +418,16 @@ function render() {
 
 async function init() {
   updateBadge();
-  // Charger les produits en cache d'abord, sinon cart.details() retourne []
-  await api.fetchProducts();
+  try {
+    // Charger tous les produits, tarifs de livraison et configurations en cache
+    await Promise.all([
+      api.fetchProducts(),
+      api.fetchShippingRates(),
+      api.fetchSettings()
+    ]);
+  } catch (e) {
+    console.warn("Échec du chargement complet des données depuis MongoDB, utilisation des caches/fallbacks:", e);
+  }
   render();
 }
 
