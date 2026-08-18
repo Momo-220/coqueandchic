@@ -91,13 +91,12 @@
       <aside class="contact-info">
         <h3 style="font-family: var(--font-serif); margin-bottom: var(--space-sm);">Coque & Chic</h3>
         <ul>
-          <li>📞 <a href="tel:+2250768613328" style="color: var(--rose-deep);">+225 07 68 61 33 28</a></li>
-          <li>✉️ <a href="mailto:contact@coquechic.com" style="color: var(--rose-deep);">contact@coquechic.com</a></li>
+          <li>📞 <a id="ownerPhoneLink" href="#" style="color: var(--rose-deep);">Chargement...</a></li>
           <li>📍 Abidjan, Côte d'Ivoire</li>
           <li>🕘 Lundi - Samedi : 9h-18h</li>
           <li>💬 WhatsApp : réponse rapide 7j/7</li>
         </ul>
-        <a href="https://wa.me/2250768613328" class="btn btn-outline" style="width:100%; margin-top: var(--space-md);" target="_blank">
+        <a id="waContactBtn" href="#" class="btn btn-outline" style="width:100%; margin-top: var(--space-md);" target="_blank">
           Discuter sur WhatsApp
         </a>
       </aside>
@@ -110,12 +109,33 @@
   <script type="module">
     import { api } from './js/api.js';
     import { toast, updateBadge } from './js/cart.js';
-    document.getElementById('contactForm').addEventListener('submit', (e) => {
+
+    // Charger le numéro de téléphone depuis les settings
+    api.fetchSettings().then(settings => {
+      const phone = settings.ownerPhone || '+225 07 68 61 33 28';
+      const phoneClean = phone.replace(/\D/g, '');
+      const phoneLink = document.getElementById('ownerPhoneLink');
+      const waBtn = document.getElementById('waContactBtn');
+      if (phoneLink) { phoneLink.href = `tel:+${phoneClean}`; phoneLink.textContent = phone; }
+      if (waBtn) waBtn.href = `https://wa.me/${phoneClean}`;
+      const waFloat = document.querySelector('.whatsapp-float');
+      if (waFloat) waFloat.href = `https://wa.me/${phoneClean}`;
+    });
+
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = 'Envoi en cours...'; }
       const data = Object.fromEntries(new FormData(e.target));
-      api.addMessage({ from: data.name, text: `[${data.subject}] ${data.message}` });
+      api.addMessage({
+        from: data.name,
+        phone: data.phone,
+        text: `[${data.subject}] ${data.message}`,
+        subject: data.subject
+      });
       toast('✨ Message envoyé ! Nous vous répondrons vite.', 'success');
       e.target.reset();
+      if (btn) { btn.disabled = false; btn.textContent = 'Envoyer le message'; }
     });
     updateBadge();
   </script>

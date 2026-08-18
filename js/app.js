@@ -56,12 +56,11 @@ export function renderProductCard(p) {
 }
 
 // ============= EVENT HANDLERS =============
-let eventsBound = false;
+// Utilise un WeakSet pour éviter les doubles bindings sur le même élément
+const _boundScopes = new WeakSet();
 export function bindProductEvents(scope = document) {
-  if (scope === document) {
-    if (eventsBound) return;
-    eventsBound = true;
-  }
+  if (_boundScopes.has(scope)) return;
+  _boundScopes.add(scope);
   scope.addEventListener('click', (e) => {
     // Favori
     const favBtn = e.target.closest('[data-fav]');

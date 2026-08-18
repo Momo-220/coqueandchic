@@ -244,14 +244,22 @@
         btn.onclick = (e) => {
           e.stopPropagation();
           if (confirm('Voulez-vous vraiment supprimer cette commande ?')) {
-            const orders = api.getOrders().filter(o => o.id !== btn.dataset.delete);
-            localStorage.setItem('cc_orders', JSON.stringify(orders));
-            try {
-              const xhr = new XMLHttpRequest();
-              xhr.open('POST', '/api/orders', false);
-              xhr.setRequestHeader('Content-Type', 'application/json');
-              xhr.send(JSON.stringify(orders));
-            } catch (e) {}
+            const orderId = btn.dataset.delete;
+            // Supprimer dans le cache local
+            const updated = api.getOrders().filter(o => o.id !== orderId);
+            sessionStorage.setItem('cc_orders', JSON.stringify(updated));
+            // Supprimer en base de données via action ciblée (pas remplacement total)
+            fetch('/api/orders', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'delete', id: orderId })
+            }).catch(() => {
+              fetch('https://www.coqueandchic.shop/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delete', id: orderId })
+              });
+            });
             render();
           }
         };

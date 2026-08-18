@@ -57,7 +57,20 @@ const postAction = (endpoint, action, id, payload) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: bodyStr
-    }).catch(e => console.warn(`Enregistrement asynchrone échoué pour ${endpoint}:`, e));
+    }).catch(e => {
+      console.error(`[Coque&Chic] ⚠️ Échec synchronisation "${action}" sur "${endpoint}":`, e);
+      // Notifier l'admin si possible (ne plante pas si toast absent)
+      try {
+        const container = document.getElementById('toastContainer');
+        if (container) {
+          const t = document.createElement('div');
+          t.className = 'toast error';
+          t.textContent = `⚠️ Erreur de synchronisation (${endpoint}). Vérifiez votre connexion.`;
+          container.appendChild(t);
+          setTimeout(() => t.remove(), 5000);
+        }
+      } catch (_) {}
+    });
   });
 };
 

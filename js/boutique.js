@@ -20,13 +20,14 @@ if (params.get('cat')) {
 }
 
 async function render() {
+  if (!grid) return; // protection crash si élément absent du DOM
   const products = await api.fetchProducts({ category: currentCat, search: currentSearch });
   grid.innerHTML = '';
   if (!products || products.length === 0) {
-    noResults.style.display = 'block';
+    if (noResults) noResults.style.display = 'block';
     return;
   }
-  noResults.style.display = 'none';
+  if (noResults) noResults.style.display = 'none';
   products.forEach(p => grid.appendChild(renderProductCard(p)));
 }
 
